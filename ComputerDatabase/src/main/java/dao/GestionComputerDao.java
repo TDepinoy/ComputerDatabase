@@ -25,6 +25,7 @@ public class GestionComputerDao {
 	public static final String INSERT_ONE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 	public static final String DELETE_ONE_COMPUTER = "DELETE FROM computer WHERE id=?";
 	public static final String UPDATE_ONE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
+	public static final String COUNT_COMPUTERS = "SELECT COUNT(id) as total FROM computer";
 
 	private static GestionComputerDao dao;
 
@@ -41,11 +42,11 @@ public class GestionComputerDao {
 		PreparedStatement pt = null;
 		try {
 			pt = conn.prepareStatement(INSERT_ONE_COMPUTER);
-			pt.setString(0, c.getName());
-			pt.setDate(1, new java.sql.Date(c.getIntroduced().getTime()));
-			pt.setDate(2, new java.sql.Date(c.getDiscontinued().getTime()));
-			pt.setInt(3, c.getCompany().getId());
-			pt.setInt(4, c.getId());
+			pt.setString(1, c.getName());
+			pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
+			pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
+			pt.setInt(4, c.getCompany().getId());
+			pt.setInt(5, c.getId());
 			
 			pt.executeUpdate();
 		} catch (SQLException e) {
@@ -67,7 +68,7 @@ public class GestionComputerDao {
 		PreparedStatement pt = null;
 		try {
 			pt = conn.prepareStatement(DELETE_ONE_COMPUTER);
-			pt.setInt(0, id);
+			pt.setInt(1, id);
 			pt.executeUpdate();
 		} catch (SQLException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Erreur de syntaxe SQL");
@@ -88,10 +89,10 @@ public class GestionComputerDao {
 		PreparedStatement pt = null;
 		try {
 			pt = conn.prepareStatement(UPDATE_ONE_COMPUTER);
-			pt.setString(0, c.getName());
-			pt.setDate(1, new java.sql.Date(c.getIntroduced().getTime()));
-			pt.setDate(2, new java.sql.Date(c.getDiscontinued().getTime()));
-			pt.setInt(3, c.getCompany().getId());
+			pt.setString(1, c.getName());
+			pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
+			pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
+			pt.setInt(4, c.getCompany().getId());
 			pt.executeUpdate();
 		} catch (SQLException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Erreur de syntaxe SQL");
@@ -114,7 +115,7 @@ public class GestionComputerDao {
 
 		try {
 			pt = conn.prepareStatement(SELECT_ONE_COMPUTER);
-			pt.setInt(0, id);
+			pt.setInt(1, id);
 			ResultSet res = pt.executeQuery();
 
 			res.first();
@@ -146,13 +147,15 @@ public class GestionComputerDao {
 		return c;
 	}
 
-	public List<Computer> getComputers() {
+	public List<Computer> getComputers(int start, int maxResults) {
 		Connection conn = JdbcConnection.getConnection(URL, USERNAME, PWD);
 		PreparedStatement pt = null;
 		List<Computer> computers = new ArrayList<Computer>();
 
 		try {
 			pt = conn.prepareStatement(SELECT_ALL_COMPUTERS);
+			pt.setInt(1, start*maxResults);
+			pt.setInt(2, maxResults);
 			ResultSet res = pt.executeQuery();
 
 			while (res.next()) {
@@ -184,5 +187,34 @@ public class GestionComputerDao {
 		}
 
 		return computers;
+	}
+	
+	public int countComputers () {
+		Connection conn = JdbcConnection.getConnection(URL, USERNAME, PWD);
+		PreparedStatement pt = null;
+		
+		int total = 0;
+		
+		try {
+			pt = conn.prepareStatement(COUNT_COMPUTERS);
+			ResultSet res = pt.executeQuery();
+			res.first();
+			
+			total = res.getInt("total");
+			
+		} catch (SQLException e) {
+			Logger.getLogger("main").log(Level.SEVERE, "Erreur de syntaxe SQL");
+			e.printStackTrace();
+		} finally {
+			JdbcConnection.closeConnection(conn);
+
+			try {
+				pt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return total;
 	}
 }

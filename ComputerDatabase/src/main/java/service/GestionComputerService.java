@@ -7,6 +7,8 @@ import entites.Computer;
 
 public class GestionComputerService {
 
+	public static final int MAX_RESULTS_PER_PAGE = 10;
+	
 	private static GestionComputerService service;
 	private GestionComputerDao dao;
 	
@@ -22,8 +24,12 @@ public class GestionComputerService {
 		return service;
 	}
 	
-	public List<Computer> getComputers() {
-		return dao.getComputers();
+	public List<Computer> getComputers(int start) {
+		return dao.getComputers(start, MAX_RESULTS_PER_PAGE);
+	}
+	
+	public int countComputers() {
+		return dao.countComputers();
 	}
 	
 }

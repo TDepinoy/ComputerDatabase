@@ -53,10 +53,10 @@
 			<tbody>
 				<c:forEach var="c" items="${computers}">
 					<tr>
-						<td><a href="/computers/${c.id}">${c.name}</a></td>
+						<td><a href="UpdateComputerServlet/?idComputer=${c.id}">${c.name}</a></td>
 						<td><em>${c.introduced}</em></td>
 						<td><em>${c.discontinued}</em></td>
-						<td><em>${c.company}</em></td>
+						<td><em>${c.company.name}</em></td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -65,9 +65,26 @@
 
 		<div id="pagination" class="pagination">
 			<ul>
-				<li class="prev disabled"><a>&larr; Previous</a></li>
-				<li class="current"><a>Displaying 1 to 10 of 574</a></li>
-				<li class="next"><a href="/computers?p=1">Next &rarr;</a></li>
+				<c:choose>
+					<c:when test="${from == 1}">
+						<li class="prev disabled"><a>&larr; Previous</a></li>
+					</c:when>
+					<c:when test="${from != 1}">
+						<li class="prev"><a href="showComputers?currentIndex=${currentIndex - 1}">&larr; Previous</a></li>
+					</c:when>
+				</c:choose>
+				
+				<li class="current"><a>Displaying ${from} to ${to} of ${totalComputers}</a></li>
+				
+				<c:choose>
+					<c:when test="${to != totalComputers}">
+						<li class="next"><a href="showComputers?currentIndex=${currentIndex + 1}">Next &rarr;</a></li>
+					</c:when>
+					<c:when test="${to == totalComputers}">
+						<li class="next disabled"><a>Next &rarr;</a></li>
+					</c:when>
+				</c:choose>
+				
 			</ul>
 		</div>
 	</section>
