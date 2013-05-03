@@ -36,8 +36,8 @@ public class GestionComputerService {
 		return dao.countComputers();
 	}
 	
-	public void updateComputer (Computer c) {
-		dao.updateComputer(c);
+	public void insertOrUpdateComputer (Computer c) {
+		dao.insertOrUpdateComputer(c);
 	}
 	
 	public void deleteComputer (int id) {

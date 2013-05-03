@@ -10,9 +10,7 @@ public class Computer {
 	private Date discontinued;
 	private Company company;
 	
-	public Computer () {
-		
-	}
+	public Computer () {}
 	
 	public Computer(int id, String name, Date introduced, Date discontinued,
 			Company company) {

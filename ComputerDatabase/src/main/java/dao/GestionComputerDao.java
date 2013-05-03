@@ -32,33 +32,7 @@ public class GestionComputerDao {
 	public static GestionComputerDao getInstance() {
 		return dao;
 	}
-
-	public void insertComputer(Computer c) {
-		Connection conn = JdbcConnection.getConnection();
-		PreparedStatement pt = null;
-		try {
-			pt = conn.prepareStatement(INSERT_ONE_COMPUTER);
-			pt.setString(1, c.getName());
-			pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
-			pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
-			pt.setInt(4, c.getCompany().getId());
-			pt.setInt(5, c.getId());
-			
-			pt.executeUpdate();
-		} catch (SQLException e) {
-			Logger.getLogger("main").log(Level.SEVERE, "Erreur de syntaxe SQL");
-			e.printStackTrace();
-		} finally {
-			JdbcConnection.closeConnection(conn);
-
-			try {
-				pt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
+	
 	public void deleteComputer(int id) {
 		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
@@ -80,17 +54,28 @@ public class GestionComputerDao {
 		}
 	}
 
-	public void updateComputer(Computer c) {
+	public void insertOrUpdateComputer(Computer c) {
 		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
 		try {
-			pt = conn.prepareStatement(UPDATE_ONE_COMPUTER);
-			pt.setString(1, c.getName());
-			pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
-			pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
-			pt.setInt(4, c.getCompany().getId());
-			pt.setInt(5, c.getId());
-			pt.executeUpdate();
+			if (c.getId() > 0) {
+				pt = conn.prepareStatement(UPDATE_ONE_COMPUTER);
+				pt.setString(1, c.getName());
+				pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
+				pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
+				pt.setInt(4, c.getCompany().getId());
+				pt.setInt(5, c.getId());
+				pt.executeUpdate();
+			}
+			else {
+				pt = conn.prepareStatement(INSERT_ONE_COMPUTER);
+				pt.setString(1, c.getName());
+				pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
+				pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
+				pt.setInt(4, c.getCompany().getId());
+				
+				pt.executeUpdate();
+			}
 		} catch (SQLException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Erreur de syntaxe SQL");
 			e.printStackTrace();

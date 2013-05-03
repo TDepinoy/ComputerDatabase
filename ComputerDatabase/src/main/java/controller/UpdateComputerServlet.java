@@ -22,27 +22,32 @@ import service.GestionComputerService;
 public class UpdateComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	private static final String ADD_COMPUTER_URL = "/WEB-INF/addComputer.jsp";
+	private static final String UPDATE_COMPUTER_URL = "/WEB-INF/updateComputer.jsp";
+	
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		if (request.getParameter("idComputer") == null)
-			request.getServletContext().getRequestDispatcher("/showComputers").forward(request, response);
-		else {
+		GestionComputerService serviceComputer = GestionComputerService.getInstance();
+		GestionCompanyService serviceCompany = GestionCompanyService.getInstance();	
+	
+		String url;
 		
-			GestionComputerService serviceComputer = GestionComputerService.getInstance();
-			GestionCompanyService serviceCompany = GestionCompanyService.getInstance();
-			
-			
-			int idComputer = Integer.parseInt(request.getParameter("idComputer"));
-			Computer c = serviceComputer.getComputer(idComputer);
-			request.setAttribute("computer", c);
-			
-			List<Company> companies = serviceCompany.getCompanies();		
-			request.setAttribute("companies", companies);
-			
-			request.getServletContext().getRequestDispatcher("/WEB-INF/updateComputer.jsp").forward(request, response);
+		if (request.getParameter("idComputer") == null) {
+			url = ADD_COMPUTER_URL;
 		}
+		else {
+			Computer c = serviceComputer.getComputer(Integer.parseInt(request.getParameter("idComputer")));
+			request.setAttribute("computer", c);
+			url = UPDATE_COMPUTER_URL;
+		}
+		
+		List<Company> companies = serviceCompany.getCompanies();		
+		request.setAttribute("companies", companies);
+				
+		request.getServletContext().getRequestDispatcher(url).forward(request, response);
 	}
 }

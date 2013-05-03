@@ -37,14 +37,13 @@
 			<form action="/computers" method="GET">
 
 				<input type="search" id="searchbox" name="f" value=""
-					placeholder="Filter by computer name..."> <input
-					type="submit" id="searchsubmit" value="Filter by name"
+					placeholder="Filter by computer name..."> 
+				<input type="submit" id="searchsubmit" value="Filter by name"
 					class="btn primary">
 
 			</form>
 
-			<a class="btn success" id="add" href="/computers/new">Add a new
-				computer</a>
+			<a class="btn success" id="add" href="updateComputer">Add a new computer</a>
 		</div>
 
 
@@ -53,8 +52,7 @@
 			<thead>
 				<tr>
 
-					<th class="col2 header headerSortUp"><a href="/computers?s=-2">Computer
-							name</a></th>
+					<th class="col2 header headerSortUp"><a href="/computers?s=-2">Computer name</a></th>
 					<th class="col3 header "><a href="/computers?s=3">Introduced</a></th>
 					<th class="col4 header "><a href="/computers?s=4">Discontinued</a></th>
 					<th class="col5 header "><a href="/computers?s=5">Company</a></th>
