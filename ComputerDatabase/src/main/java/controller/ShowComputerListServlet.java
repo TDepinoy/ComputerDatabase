@@ -22,9 +22,9 @@ public class ShowComputerListServlet extends HttpServlet {
        
 	
  	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		List<Computer> computers;
 		int total = GestionComputerService.getInstance().countComputers();
@@ -76,6 +76,13 @@ public class ShowComputerListServlet extends HttpServlet {
 		request.setAttribute("computers", computers);
 		request.setAttribute("totalComputers", total);
 		request.getServletContext().getRequestDispatcher("/WEB-INF/showComputers.jsp").forward(request, response);
+	}
+	
+ 	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost (request, response);
 	}
 
 

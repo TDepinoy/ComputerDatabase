@@ -16,10 +16,6 @@ import entites.Computer;
 
 public class GestionComputerDao {
 
-	public static final String USERNAME = "root";
-	public static final String PWD = "root";
-	public static final String URL = "jdbc:mysql://localhost:3306/ComputerDataBase";
-
 	public static final String SELECT_ALL_COMPUTERS = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id LIMIT ?,?";
 	public static final String SELECT_ONE_COMPUTER = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id WHERE c.id=?";
 	public static final String INSERT_ONE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
@@ -38,7 +34,7 @@ public class GestionComputerDao {
 	}
 
 	public void insertComputer(Computer c) {
-		Connection conn = JdbcConnection.getConnection(URL, USERNAME, PWD);
+		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
 		try {
 			pt = conn.prepareStatement(INSERT_ONE_COMPUTER);
@@ -64,7 +60,7 @@ public class GestionComputerDao {
 	}
 
 	public void deleteComputer(int id) {
-		Connection conn = JdbcConnection.getConnection(URL, USERNAME, PWD);
+		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
 		try {
 			pt = conn.prepareStatement(DELETE_ONE_COMPUTER);
@@ -85,7 +81,7 @@ public class GestionComputerDao {
 	}
 
 	public void updateComputer(Computer c) {
-		Connection conn = JdbcConnection.getConnection(URL, USERNAME, PWD);
+		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
 		try {
 			pt = conn.prepareStatement(UPDATE_ONE_COMPUTER);
@@ -93,6 +89,7 @@ public class GestionComputerDao {
 			pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
 			pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
 			pt.setInt(4, c.getCompany().getId());
+			pt.setInt(5, c.getId());
 			pt.executeUpdate();
 		} catch (SQLException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Erreur de syntaxe SQL");
@@ -109,7 +106,7 @@ public class GestionComputerDao {
 	}
 
 	public Computer getComputer(int id) {
-		Connection conn = JdbcConnection.getConnection(URL, USERNAME, PWD);
+		Connection conn = JdbcConnection.getConnection();
 		Computer c = new Computer();
 		PreparedStatement pt = null;
 
@@ -148,7 +145,7 @@ public class GestionComputerDao {
 	}
 
 	public List<Computer> getComputers(int start, int maxResults) {
-		Connection conn = JdbcConnection.getConnection(URL, USERNAME, PWD);
+		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
 		List<Computer> computers = new ArrayList<Computer>();
 
@@ -190,7 +187,7 @@ public class GestionComputerDao {
 	}
 	
 	public int countComputers () {
-		Connection conn = JdbcConnection.getConnection(URL, USERNAME, PWD);
+		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
 		
 		int total = 0;

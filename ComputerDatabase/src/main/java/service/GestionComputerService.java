@@ -24,12 +24,24 @@ public class GestionComputerService {
 		return service;
 	}
 	
+	public Computer getComputer (int id) {
+		return dao.getComputer(id);
+	}
+	
 	public List<Computer> getComputers(int start) {
 		return dao.getComputers(start, MAX_RESULTS_PER_PAGE);
 	}
 	
 	public int countComputers() {
 		return dao.countComputers();
+	}
+	
+	public void updateComputer (Computer c) {
+		dao.updateComputer(c);
+	}
+	
+	public void deleteComputer (int id) {
+		dao.deleteComputer(id);
 	}
 	
 }

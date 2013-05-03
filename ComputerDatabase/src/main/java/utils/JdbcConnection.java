@@ -9,6 +9,10 @@ import java.sql.Connection;
 
 public class JdbcConnection {
 		
+	public static final String USERNAME = "root";
+	public static final String PWD = "root";
+	public static final String URL = "jdbc:mysql://localhost:3306/ComputerDataBase";
+	
 	static {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -18,9 +22,9 @@ public class JdbcConnection {
 		}
 	}
 	
-	public static Connection getConnection(String url, String username, String pwd) {
+	public static Connection getConnection() {
 		try {
-			return DriverManager.getConnection(url, username, pwd);
+			return DriverManager.getConnection(URL, USERNAME, PWD);
 		} catch (SQLException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Impossible d'initialiser la connection");
 			e.printStackTrace();
