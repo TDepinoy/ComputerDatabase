@@ -24,6 +24,6 @@ public class DeleteComputerServlet extends HttpServlet {
 		int idComputer = Integer.parseInt(request.getParameter("idComputer"));	
 		service.deleteComputer(idComputer);
 		
-		request.getServletContext().getRequestDispatcher("/showComputers").forward(request, response);
+		response.sendRedirect("showComputers");
 	}
 }
