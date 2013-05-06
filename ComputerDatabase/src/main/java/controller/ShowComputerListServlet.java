@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entites.Computer;
-
 import service.GestionComputerService;
+import utils.OptionsRequest;
+import entites.Computer;
 
 /**
  * Servlet implementation class ShowComputerListServlet
@@ -22,13 +22,24 @@ public class ShowComputerListServlet extends HttpServlet {
        
 	
  	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		List<Computer> computers;
-		int total = GestionComputerService.getInstance().countComputers();
+		
+		int sort;
 		String currentIndex = request.getParameter("currentIndex");
+		String nameFilter = request.getParameter("filter");
+		
+		int total = GestionComputerService.getInstance().countComputers(nameFilter);
+		
+		try {
+			sort = Integer.parseInt(request.getParameter("s"));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			sort = 1;
+		}
 		
 		int displayFrom = 0;
 		int displayTo = 0;
@@ -36,7 +47,7 @@ public class ShowComputerListServlet extends HttpServlet {
 		if (currentIndex == null) {
 			displayFrom = 1;
 			displayTo = GestionComputerService.MAX_RESULTS_PER_PAGE;
-			computers = GestionComputerService.getInstance().getComputers(0);
+			computers = GestionComputerService.getInstance().getComputers(0, new OptionsRequest(nameFilter, sort));
 			request.setAttribute("currentIndex", 0);
 		}
 		else {
@@ -63,13 +74,15 @@ public class ShowComputerListServlet extends HttpServlet {
 				displayFrom = total - GestionComputerService.MAX_RESULTS_PER_PAGE;
 				displayTo =  total;
 				
-			}
-		
-			computers = GestionComputerService.getInstance().getComputers(index);
+			}			
+			
+			computers = GestionComputerService.getInstance().getComputers(index, new OptionsRequest(nameFilter, sort));
 			currentIndex = Integer.toString(index);
 			
 		}
 		
+		request.setAttribute("s", sort);
+		request.setAttribute("filter", nameFilter);
 		request.setAttribute("currentIndex", currentIndex);
 		request.setAttribute("from", displayFrom);
 		request.setAttribute("to", displayTo);
@@ -77,13 +90,4 @@ public class ShowComputerListServlet extends HttpServlet {
 		request.setAttribute("totalComputers", total);
 		request.getServletContext().getRequestDispatcher("/WEB-INF/showComputers.jsp").forward(request, response);
 	}
-	
- 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost (request, response);
-	}
-
-
 }

@@ -5,23 +5,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.mysql.jdbc.StringUtils;
+
 import utils.JdbcConnection;
+import utils.OptionsRequest;
 
 import entites.Company;
 import entites.Computer;
 
 public class GestionComputerDao {
 
-	public static final String SELECT_ALL_COMPUTERS = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id LIMIT ?,?";
-	public static final String SELECT_ONE_COMPUTER = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id WHERE c.id=?";
-	public static final String INSERT_ONE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
-	public static final String DELETE_ONE_COMPUTER = "DELETE FROM computer WHERE id=?";
-	public static final String UPDATE_ONE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
-	public static final String COUNT_COMPUTERS = "SELECT COUNT(id) as total FROM computer";
+	private static final String SELECT_ALL_COMPUTERS = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id WHERE c.name LIKE ?";
+	private static final String SELECT_ONE_COMPUTER = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id WHERE c.id=?";
+	private static final String INSERT_ONE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
+	private static final String DELETE_ONE_COMPUTER = "DELETE FROM computer WHERE id=?";
+	private static final String UPDATE_ONE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
+	private static final String COUNT_COMPUTERS = "SELECT COUNT(id) as total FROM computer WHERE name LIKE ?";
+	private static final String ORDER_BY_LIMIT_STR = " ORDER BY ISNULL (%1$s), %1$s %2$s LIMIT %3$d, %4$d";
 
 	private static GestionComputerDao dao;
 
@@ -129,15 +134,23 @@ public class GestionComputerDao {
 		return c;
 	}
 
-	public List<Computer> getComputers(int start, int maxResults) {
+	public List<Computer> getComputers(int start, int maxResults, OptionsRequest or) {
 		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
 		List<Computer> computers = new ArrayList<Computer>();
-
+		Formatter f = new Formatter ();
+		
 		try {
-			pt = conn.prepareStatement(SELECT_ALL_COMPUTERS);
-			pt.setInt(1, start*maxResults);
-			pt.setInt(2, maxResults);
+			f.format(ORDER_BY_LIMIT_STR, or.getOrderC().toString(), or.getOrderW().toString(), start, maxResults);
+			
+			StringBuilder sb = new StringBuilder (SELECT_ALL_COMPUTERS);
+			sb.append(f.toString());
+			
+			pt = conn.prepareStatement(sb.toString());
+			pt.setString(1, or.getNameFilter());			
+			
+			System.out.println(pt.toString());
+			
 			ResultSet res = pt.executeQuery();
 
 			while (res.next()) {
@@ -160,7 +173,8 @@ public class GestionComputerDao {
 			e.printStackTrace();
 		} finally {
 			JdbcConnection.closeConnection(conn);
-
+			f.close();
+			
 			try {
 				pt.close();
 			} catch (SQLException e) {
@@ -171,7 +185,12 @@ public class GestionComputerDao {
 		return computers;
 	}
 	
-	public int countComputers () {
+	public int countComputers (String filter) {
+		if (StringUtils.isNullOrEmpty(filter))
+			filter = "%";
+		else
+			filter = new StringBuilder ().append("%").append(filter).append("%").toString();
+		
 		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
 		
@@ -179,6 +198,10 @@ public class GestionComputerDao {
 		
 		try {
 			pt = conn.prepareStatement(COUNT_COMPUTERS);
+			pt.setString(1, filter);
+			
+			System.out.println(pt.toString());
+			
 			ResultSet res = pt.executeQuery();
 			res.first();
 			

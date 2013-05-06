@@ -24,39 +24,25 @@
 
 		<h1>${totalComputers} computers found</h1>
 
-		<c:if test="${updateDone eq 'done'}">
-
-			<div class="alert-message warning">
-				<strong>Done!</strong> Computer ${updatedComputer.name} has been
-				updated
-			</div>
-
-		</c:if>
-
 		<div id="actions">
-			<form action="/computers" method="GET">
+			<form action="showComputers" method="GET">
 
-				<input type="search" id="searchbox" name="f" value=""
-					placeholder="Filter by computer name..."> 
-				<input type="submit" id="searchsubmit" value="Filter by name"
-					class="btn primary">
+				<input type="search" id="searchbox" name="filter" value="" placeholder="${empty filter ? 'Filter by computer name...' : filter}"> 
+				<input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
 
 			</form>
 
 			<a class="btn success" id="add" href="updateComputer">Add a new computer</a>
 		</div>
 
-
-
 		<table class="computers zebra-striped">
 			<thead>
 				<tr>
-
-					<th class="col2 header headerSortUp"><a href="/computers?s=-2">Computer name</a></th>
-					<th class="col3 header "><a href="/computers?s=3">Introduced</a></th>
-					<th class="col4 header "><a href="/computers?s=4">Discontinued</a></th>
-					<th class="col5 header "><a href="/computers?s=5">Company</a></th>
-
+					<th class="col2 header ${s eq '1' ? 'headerSortUp' :  s eq '-1' ? 'headerSortDown' : empty s ? 'headerSortUp' : ''}"><a href="showComputers?filter=${filter}&s=${s eq '1' ? '-1' : '1'}">Computer name</a></th>
+					<th class="col3 header ${s eq '2' ? 'headerSortUp' :  s eq '-2' ? 'headerSortDown' : ''}"><a href="showComputers?filter=${filter}&s=${s eq '2' ? '-2' : '2'}">Introduced</a></th>
+					<th class="col4 header ${s eq '3' ? 'headerSortUp' :  s eq '-3' ? 'headerSortDown' : ''}"><a href="showComputers?filter=${filter}&s=${s eq '3' ? '-3' : '3'}">Discontinued</a></th>
+					<th class="col5 header ${s eq '4' ? 'headerSortUp' :  s eq '-4' ? 'headerSortDown' : ''} "><a href="showComputers?filter=${filter}&s=${s eq '4' ? '-4' : '4'}">Company</a></th>
+					
 				</tr>
 			</thead>
 			<tbody>
@@ -89,7 +75,7 @@
 				<c:choose>
 					<c:when test="${to ne totalComputers}">
 						<li class="next"><a
-							href="showComputers?currentIndex=${currentIndex + 1}">Next &rarr;</a></li>
+							href="showComputers?currentIndex=${currentIndex + 1}?filter=${filter}&s=${s}">Next &rarr;</a></li>
 					</c:when>
 					<c:otherwise>
 						<li class="next disabled"><a>Next &rarr;</a></li>

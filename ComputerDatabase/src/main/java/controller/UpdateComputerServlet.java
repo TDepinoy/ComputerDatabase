@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import entites.Company;
 import entites.Computer;
 
-import service.GestionCompanyService;
 import service.GestionComputerService;
 
 /**
@@ -31,8 +30,7 @@ public class UpdateComputerServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		GestionComputerService serviceComputer = GestionComputerService.getInstance();
-		GestionCompanyService serviceCompany = GestionCompanyService.getInstance();	
+		GestionComputerService service = GestionComputerService.getInstance();
 	
 		String url;
 		
@@ -40,12 +38,12 @@ public class UpdateComputerServlet extends HttpServlet {
 			url = ADD_COMPUTER_URL;
 		}
 		else {
-			Computer c = serviceComputer.getComputer(Integer.parseInt(request.getParameter("idComputer")));
+			Computer c = service.getComputer(Integer.parseInt(request.getParameter("idComputer")));
 			request.setAttribute("computer", c);
 			url = UPDATE_COMPUTER_URL;
 		}
 		
-		List<Company> companies = serviceCompany.getCompanies();		
+		List<Company> companies = service.getCompanies();		
 		request.setAttribute("companies", companies);
 				
 		request.getServletContext().getRequestDispatcher(url).forward(request, response);

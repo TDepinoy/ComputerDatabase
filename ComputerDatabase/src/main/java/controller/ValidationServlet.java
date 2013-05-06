@@ -1,11 +1,9 @@
 package controller;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import service.GestionCompanyService;
 import service.GestionComputerService;
 
 import com.mysql.jdbc.StringUtils;
@@ -27,8 +24,9 @@ import entites.Computer;
  * Servlet implementation class validationServlet
  */
 @WebServlet("/validationServlet")
-public class validationServlet extends HttpServlet {
+public class ValidationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
 	private static final String standardClass = "clearfix ";
 	private static final String errorClass = "clearfix error";
 
@@ -40,7 +38,6 @@ public class validationServlet extends HttpServlet {
 
 		boolean error = false;
 		GestionComputerService service = GestionComputerService.getInstance();
-		GestionCompanyService serviceComp = GestionCompanyService.getInstance();
 
 		Computer c = new Computer();
 
@@ -66,47 +63,42 @@ public class validationServlet extends HttpServlet {
 			error = true;
 		} else {
 			request.setAttribute("classCompany", standardClass);
-			Company cy = serviceComp.getCompany(Integer.parseInt(companyId));
+			Company cy = service.getCompany(Integer.parseInt(companyId));
 			c.setCompany(cy);
 		}
 
 		try {
-			Date introduced = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("introduced"));
-			c.setIntroduced(introduced);
+			if (!StringUtils.isNullOrEmpty(request.getParameter("introduced"))) {
+				Date introduced = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("introduced"));
+				c.setIntroduced(introduced);
+			}
 		} catch (ParseException e) {
-			Logger.getLogger("main").log(Level.SEVERE,
-					"Erreur de parsing de date");
+			Logger.getLogger("main").log(Level.SEVERE, "Erreur de parsing de date");
 			e.printStackTrace();
 			request.setAttribute("classIntroduced", errorClass);
 			error = true;
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-			c.setIntroduced(null);
-		}
+		} 
 
 		try {
-			Date discontinued = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("discontinued"));
-			c.setDiscontinued(discontinued);
+			if (!StringUtils.isNullOrEmpty(request.getParameter("discontinued"))) {
+				Date discontinued = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("discontinued"));
+				c.setDiscontinued(discontinued);
+			}
 		} catch (ParseException e) {
-			Logger.getLogger("main").log(Level.SEVERE,
-					"Erreur de parsing de date");
+			Logger.getLogger("main").log(Level.SEVERE, "Erreur de parsing de date");
 			e.printStackTrace();
 			request.setAttribute("classDiscontinued", errorClass);
 			error = true;
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-			c.setDiscontinued(null);
 		}
 
 		request.setAttribute("computer", c);
 
 		if (error) {
-			request.setAttribute("companies", serviceComp.getCompanies());
+			request.setAttribute("companies", service.getCompanies());
 			request.getServletContext().getRequestDispatcher("/WEB-INF/updateComputer.jsp").forward(request, response);
 		} else {
 			service.insertOrUpdateComputer(c);
-			request.setAttribute("updateDone", "done");
-			request.getServletContext().getRequestDispatcher("/showComputers").forward(request, response);
+			response.sendRedirect("/showComputers");
 		}
 
 	}

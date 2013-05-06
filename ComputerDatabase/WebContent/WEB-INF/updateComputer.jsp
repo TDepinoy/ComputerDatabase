@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,7 +40,7 @@
 				<div class="${classIntroduced}">
 					<label for="introduced">Introduced date</label>
 					<div class="input">
-						<input type="text" id="introduced" name="introduced" value="${computer.introduced}">
+						<input type="text" id="introduced" name="introduced" value="<fmt:formatDate value="${computer.introduced}" pattern="yyyy-MM-dd" />">
 						<span class="help-inline">Date (&#x27;yyyy-MM-dd&#x27;)</span>
 					</div>
 				</div>
@@ -46,7 +48,7 @@
 				<div class="${classDiscontinued}">
 					<label for="discontinued">Discontinued date</label>
 					<div class="input">
-						<input type="text" id="discontinued" name="discontinued" value="${computer.discontinued}">
+						<input type="text" id="discontinued" name="discontinued" value="<fmt:formatDate value="${computer.discontinued}" pattern="yyyy-MM-dd" />">
 						<span class="help-inline">Date (&#x27;yyyy-MM-dd&#x27;)</span>
 					</div>
 				</div>

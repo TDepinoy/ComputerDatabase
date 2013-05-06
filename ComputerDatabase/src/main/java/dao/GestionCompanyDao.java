@@ -10,8 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import utils.JdbcConnection;
+
 import entites.Company;
-import entites.Computer;
 
 public class GestionCompanyDao {
 	public static final String SELECT_ALL_COMPANIES = "SELECT id, name FROM company";
