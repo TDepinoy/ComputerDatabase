@@ -98,7 +98,7 @@ public class ValidationServlet extends HttpServlet {
 			request.getServletContext().getRequestDispatcher("/WEB-INF/updateComputer.jsp").forward(request, response);
 		} else {
 			service.insertOrUpdateComputer(c);
-			response.sendRedirect("/showComputers");
+			response.sendRedirect("showComputers");
 		}
 
 	}

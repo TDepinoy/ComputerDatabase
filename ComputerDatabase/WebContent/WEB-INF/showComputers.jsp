@@ -27,7 +27,7 @@
 		<div id="actions">
 			<form action="showComputers" method="GET">
 
-				<input type="search" id="searchbox" name="filter" value="" placeholder="${empty filter ? 'Filter by computer name...' : filter}"> 
+				<input type="search" id="searchbox" name="filter" value="${empty filter ? '' : filter}" placeholder="Filter by computer name..."> 
 				<input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
 
 			</form>
@@ -75,7 +75,7 @@
 				<c:choose>
 					<c:when test="${to ne totalComputers}">
 						<li class="next"><a
-							href="showComputers?currentIndex=${currentIndex + 1}?filter=${filter}&s=${s}">Next &rarr;</a></li>
+							href="showComputers?currentIndex=${currentIndex + 1}&filter=${filter}&s=${s}">Next &rarr;</a></li>
 					</c:when>
 					<c:otherwise>
 						<li class="next disabled"><a>Next &rarr;</a></li>

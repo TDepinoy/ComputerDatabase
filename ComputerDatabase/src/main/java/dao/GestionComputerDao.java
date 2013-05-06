@@ -26,8 +26,8 @@ public class GestionComputerDao {
 	private static final String DELETE_ONE_COMPUTER = "DELETE FROM computer WHERE id=?";
 	private static final String UPDATE_ONE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 	private static final String COUNT_COMPUTERS = "SELECT COUNT(c.id) as total FROM computer as c";
-	private static final String ORDER_BY_LIMIT_STR = " ORDER BY ISNULL (%1$s), %1$s %2$s LIMIT %3$d, %4$d";
 	private static final String WHERE_FILTER_NAME_STR = " WHERE c.name LIKE %s";
+	private static final String ORDER_BY_LIMIT_STR = " ORDER BY ISNULL (%1$s), %1$s %2$s LIMIT %3$d, %4$d";
 	
 	
 	private static GestionComputerDao dao;
@@ -67,22 +67,27 @@ public class GestionComputerDao {
 		try {
 			if (c.getId() > 0) {
 				pt = conn.prepareStatement(UPDATE_ONE_COMPUTER);
-				pt.setString(1, c.getName());
-				pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
-				pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
-				pt.setInt(4, c.getCompany().getId());
 				pt.setInt(5, c.getId());
-				pt.executeUpdate();
 			}
 			else {
 				pt = conn.prepareStatement(INSERT_ONE_COMPUTER);
-				pt.setString(1, c.getName());
-				pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
-				pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
-				pt.setInt(4, c.getCompany().getId());
-				
-				pt.executeUpdate();
 			}
+			pt.setString(1, c.getName());
+			
+			if (c.getIntroduced() != null)
+				pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
+			else
+				pt.setDate(2, null);
+			
+			if(c.getDiscontinued() != null)
+				pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
+			else
+				pt.setDate(3, null);
+			
+			pt.setInt(4, c.getCompany().getId());
+			
+			pt.executeUpdate();
+			
 		} catch (SQLException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Erreur de syntaxe SQL");
 			e.printStackTrace();
@@ -145,14 +150,13 @@ public class GestionComputerDao {
 		try {			
 			StringBuilder sb = new StringBuilder (SELECT_ALL_COMPUTERS);
 			
-			if (StringUtils.isNullOrEmpty(or.getNameFilter())) {
-				f.format(WHERE_FILTER_NAME_STR, or.getNameFilter());
-				sb.append(f.toString());
-			}
-				
+			if (!StringUtils.isNullOrEmpty(or.getNameFilter())) 
+				f.format(WHERE_FILTER_NAME_STR, or.getNameFilter());		
+			
 			f.format(ORDER_BY_LIMIT_STR, or.getOrderC().toString(), or.getOrderW().toString(), start, maxResults);
 			sb.append(f.toString());
 			
+			System.out.println(sb.toString());
 			pt = conn.prepareStatement(sb.toString());			
 			
 			ResultSet res = pt.executeQuery();
@@ -201,13 +205,13 @@ public class GestionComputerDao {
 			
 			StringBuilder sb = new StringBuilder (COUNT_COMPUTERS);
 			
-			if (StringUtils.isNullOrEmpty(filter)) {
-				f.format(WHERE_FILTER_NAME_STR, filter);
-				sb.append(f.toString());
-			}
+			if (!StringUtils.isNullOrEmpty(filter)) 
+				f.format(WHERE_FILTER_NAME_STR, new StringBuilder().append("'%").append(filter).append("%'"));
 			
-			pt = conn.prepareStatement(COUNT_COMPUTERS);
-			
+			sb.append(f.toString());
+
+			pt = conn.prepareStatement(sb.toString());
+
 			ResultSet res = pt.executeQuery();
 			res.first();
 			

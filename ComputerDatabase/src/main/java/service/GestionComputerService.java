@@ -23,6 +23,7 @@ public class GestionComputerService {
 	
 	private GestionComputerService () {
 		dao = GestionComputerDao.getInstance();
+		daoCy = GestionCompanyDao.getInstance();
 	}
 	
 	public static GestionComputerService getInstance() {

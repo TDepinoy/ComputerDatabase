@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mysql.jdbc.StringUtils;
+
 import service.GestionComputerService;
 import utils.OptionsRequest;
 import entites.Computer;
@@ -37,7 +39,6 @@ public class ShowComputerListServlet extends HttpServlet {
 		try {
 			sort = Integer.parseInt(request.getParameter("s"));
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
 			sort = 1;
 		}
 		
@@ -72,8 +73,7 @@ public class ShowComputerListServlet extends HttpServlet {
 			else if ( (index + 1 ) * GestionComputerService.MAX_RESULTS_PER_PAGE > total) {
 				index = total / GestionComputerService.MAX_RESULTS_PER_PAGE;
 				displayFrom = total - GestionComputerService.MAX_RESULTS_PER_PAGE;
-				displayTo =  total;
-				
+				displayTo =  total;	
 			}			
 			
 			computers = GestionComputerService.getInstance().getComputers(index, new OptionsRequest(nameFilter, sort));
