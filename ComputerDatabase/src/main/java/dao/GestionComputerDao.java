@@ -20,14 +20,16 @@ import entites.Computer;
 
 public class GestionComputerDao {
 
-	private static final String SELECT_ALL_COMPUTERS = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id WHERE c.name LIKE ?";
+	private static final String SELECT_ALL_COMPUTERS = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id ";
 	private static final String SELECT_ONE_COMPUTER = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id WHERE c.id=?";
 	private static final String INSERT_ONE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 	private static final String DELETE_ONE_COMPUTER = "DELETE FROM computer WHERE id=?";
 	private static final String UPDATE_ONE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
-	private static final String COUNT_COMPUTERS = "SELECT COUNT(id) as total FROM computer WHERE name LIKE ?";
+	private static final String COUNT_COMPUTERS = "SELECT COUNT(c.id) as total FROM computer as c";
 	private static final String ORDER_BY_LIMIT_STR = " ORDER BY ISNULL (%1$s), %1$s %2$s LIMIT %3$d, %4$d";
-
+	private static final String WHERE_FILTER_NAME_STR = " WHERE c.name LIKE %s";
+	
+	
 	private static GestionComputerDao dao;
 
 	static {
@@ -140,16 +142,18 @@ public class GestionComputerDao {
 		List<Computer> computers = new ArrayList<Computer>();
 		Formatter f = new Formatter ();
 		
-		try {
-			f.format(ORDER_BY_LIMIT_STR, or.getOrderC().toString(), or.getOrderW().toString(), start, maxResults);
-			
+		try {			
 			StringBuilder sb = new StringBuilder (SELECT_ALL_COMPUTERS);
+			
+			if (StringUtils.isNullOrEmpty(or.getNameFilter())) {
+				f.format(WHERE_FILTER_NAME_STR, or.getNameFilter());
+				sb.append(f.toString());
+			}
+				
+			f.format(ORDER_BY_LIMIT_STR, or.getOrderC().toString(), or.getOrderW().toString(), start, maxResults);
 			sb.append(f.toString());
 			
-			pt = conn.prepareStatement(sb.toString());
-			pt.setString(1, or.getNameFilter());			
-			
-			System.out.println(pt.toString());
+			pt = conn.prepareStatement(sb.toString());			
 			
 			ResultSet res = pt.executeQuery();
 
@@ -186,10 +190,7 @@ public class GestionComputerDao {
 	}
 	
 	public int countComputers (String filter) {
-		if (StringUtils.isNullOrEmpty(filter))
-			filter = "%";
-		else
-			filter = new StringBuilder ().append("%").append(filter).append("%").toString();
+		Formatter f = new Formatter ();
 		
 		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
@@ -197,10 +198,15 @@ public class GestionComputerDao {
 		int total = 0;
 		
 		try {
-			pt = conn.prepareStatement(COUNT_COMPUTERS);
-			pt.setString(1, filter);
 			
-			System.out.println(pt.toString());
+			StringBuilder sb = new StringBuilder (COUNT_COMPUTERS);
+			
+			if (StringUtils.isNullOrEmpty(filter)) {
+				f.format(WHERE_FILTER_NAME_STR, filter);
+				sb.append(f.toString());
+			}
+			
+			pt = conn.prepareStatement(COUNT_COMPUTERS);
 			
 			ResultSet res = pt.executeQuery();
 			res.first();
@@ -214,6 +220,7 @@ public class GestionComputerDao {
 			JdbcConnection.closeConnection(conn);
 
 			try {
+				f.close();
 				pt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();

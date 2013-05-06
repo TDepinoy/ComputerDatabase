@@ -1,7 +1,5 @@
 package utils;
 
-import com.mysql.jdbc.StringUtils;
-
 public class OptionsRequest {
 	
 	public enum OrderWay {
@@ -29,10 +27,7 @@ public class OptionsRequest {
 	public OptionsRequest(String nameFilter, int sort) {
 		super();		
 		
-		if (StringUtils.isNullOrEmpty(nameFilter))
-			this.nameFilter = "%";
-		else
-			this.nameFilter = new StringBuilder().append("%").append(nameFilter).append("%").toString();
+		this.nameFilter = new StringBuilder().append("%").append(nameFilter).append("%").toString();
 		
 		setSort(sort);
 	

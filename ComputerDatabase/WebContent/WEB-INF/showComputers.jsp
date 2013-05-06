@@ -49,9 +49,9 @@
 				<c:forEach var="c" items="${computers}">
 					<tr>
 						<td><a href="updateComputer?idComputer=${c.id}">${c.name}</a></td>
-						<td><em>${c.introduced}</em></td>
-						<td><em>${c.discontinued}</em></td>
-						<td><em>${c.company.name}</em></td>
+						<td>${c.introduced}</td>
+						<td>${c.discontinued}</td>
+						<td>${c.company.name}</td>
 					</tr>
 				</c:forEach>
 			</tbody>
