@@ -12,7 +12,7 @@
 
 	<header class="topbar">
 		<h1 class="fill">
-			<a href="/"> Computer Database application </a>
+			<a href="/showComputers"> Computer Database application </a>
 		</h1>
 	</header>
 
