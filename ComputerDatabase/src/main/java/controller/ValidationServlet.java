@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -68,7 +69,9 @@ public class ValidationServlet extends HttpServlet {
 		
 		try {
 			if (!StringUtils.isNullOrEmpty(request.getParameter("introduced"))) {
-				Date introduced = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("introduced"));
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				df.setLenient(false);
+				Date introduced = df.parse(request.getParameter("introduced"));
 				c.setIntroduced(introduced);
 			}
 		} catch (ParseException e) {
@@ -80,8 +83,10 @@ public class ValidationServlet extends HttpServlet {
 
 		try {
 			if (!StringUtils.isNullOrEmpty(request.getParameter("discontinued"))) {
-				Date discontinued = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("discontinued"));
-				c.setDiscontinued(discontinued);
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				df.setLenient(false);
+				Date introduced = df.parse(request.getParameter("discontinued"));
+				c.setIntroduced(introduced);
 			}
 		} catch (ParseException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Erreur de parsing de date");
