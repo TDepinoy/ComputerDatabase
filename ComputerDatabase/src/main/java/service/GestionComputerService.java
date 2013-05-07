@@ -10,8 +10,6 @@ import entites.Company;
 import entites.Computer;
 
 public class GestionComputerService {
-
-	public static final int MAX_RESULTS_PER_PAGE = 10;
 	
 	private static GestionComputerService service;
 	private GestionComputerDao dao;
@@ -34,8 +32,8 @@ public class GestionComputerService {
 		return dao.getComputer(id);
 	}
 	
-	public List<Computer> getComputers(int start, OptionsRequest or) {
-		return dao.getComputers(start, MAX_RESULTS_PER_PAGE, or);
+	public List<Computer> getComputers(int start, int maxResults, OptionsRequest or) {
+		return dao.getComputers(start, maxResults, or);
 	}
 	
 	public int countComputers(String filter) {

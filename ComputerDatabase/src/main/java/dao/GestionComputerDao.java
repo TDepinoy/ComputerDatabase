@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
@@ -72,6 +73,7 @@ public class GestionComputerDao {
 			else {
 				pt = conn.prepareStatement(INSERT_ONE_COMPUTER);
 			}
+			
 			pt.setString(1, c.getName());
 			
 			if (c.getIntroduced() != null)
@@ -84,8 +86,11 @@ public class GestionComputerDao {
 			else
 				pt.setDate(3, null);
 			
-			pt.setInt(4, c.getCompany().getId());
-			
+			if (c.getCompany() != null)
+				pt.setInt(4, c.getCompany().getId());
+			else
+				pt.setNull(4, Types.NULL);
+					
 			pt.executeUpdate();
 			
 		} catch (SQLException e) {

@@ -58,6 +58,8 @@
 					<div class="input">
 						<select id="company" name="company">
 
+						<option class="blank" value="">-- Choose a company --</option>
+
 						<c:forEach var="c" items="${companies}">
 							<c:choose>
 								<c:when test="${computer.company.id ne c.id}">

@@ -38,7 +38,7 @@ public class ValidationServlet extends HttpServlet {
 
 		boolean error = false;
 		GestionComputerService service = GestionComputerService.getInstance();
-
+		Company cy;
 		Computer c = new Computer();
 
 		String idComputer = request.getParameter("idComputer");
@@ -58,15 +58,14 @@ public class ValidationServlet extends HttpServlet {
 			c.setName(name);
 		}
 
-		if (StringUtils.isNullOrEmpty(companyId)) {
-			request.setAttribute("classCompany", errorClass);
-			error = true;
-		} else {
-			request.setAttribute("classCompany", standardClass);
-			Company cy = service.getCompany(Integer.parseInt(companyId));
-			c.setCompany(cy);
-		}
-
+		if (StringUtils.isNullOrEmpty(companyId)) 
+			 cy = null;
+		else 	
+			cy = service.getCompany(Integer.parseInt(companyId));		
+		
+		request.setAttribute("classCompany", standardClass);
+		c.setCompany(cy);
+		
 		try {
 			if (!StringUtils.isNullOrEmpty(request.getParameter("introduced"))) {
 				Date introduced = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("introduced"));

@@ -14,7 +14,7 @@ import utils.JdbcConnection;
 import entites.Company;
 
 public class GestionCompanyDao {
-	public static final String SELECT_ALL_COMPANIES = "SELECT id, name FROM company";
+	public static final String SELECT_ALL_COMPANIES = "SELECT id, name FROM company ORDER BY name";
 	public static final String SELECT_ONE_COMPANY = "SELECT id, name FROM company WHERE id=?";
 	private static GestionCompanyDao dao;
 

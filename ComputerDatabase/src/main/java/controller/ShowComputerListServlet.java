@@ -21,7 +21,7 @@ import entites.Computer;
 @WebServlet("/showComputers")
 public class ShowComputerListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	public static final int MAX_RESULTS_PER_PAGE = 10;   
 	
  	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -47,8 +47,8 @@ public class ShowComputerListServlet extends HttpServlet {
 		
 		if (currentIndex == null) {
 			displayFrom = 1;
-			displayTo = GestionComputerService.MAX_RESULTS_PER_PAGE;
-			computers = GestionComputerService.getInstance().getComputers(0, new OptionsRequest(nameFilter, sort));
+			displayTo = MAX_RESULTS_PER_PAGE;
+			computers = GestionComputerService.getInstance().getComputers(0, MAX_RESULTS_PER_PAGE, new OptionsRequest(nameFilter, sort));
 			request.setAttribute("currentIndex", 0);
 		}
 		else {
@@ -61,22 +61,22 @@ public class ShowComputerListServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-			displayFrom = index * GestionComputerService.MAX_RESULTS_PER_PAGE + 1;
-			displayTo = (index + 1 )* GestionComputerService.MAX_RESULTS_PER_PAGE;
+			displayFrom = index * MAX_RESULTS_PER_PAGE + 1;
+			displayTo = (index + 1 )* MAX_RESULTS_PER_PAGE;
 			
 			
 			if (index < 0) {
 				index = 0;
 				displayFrom = 1;
-				displayTo =  GestionComputerService.MAX_RESULTS_PER_PAGE;
+				displayTo =  MAX_RESULTS_PER_PAGE;
 			}
-			else if ( (index + 1 ) * GestionComputerService.MAX_RESULTS_PER_PAGE > total) {
-				index = total / GestionComputerService.MAX_RESULTS_PER_PAGE;
-				displayFrom = total - GestionComputerService.MAX_RESULTS_PER_PAGE;
+			else if ( (index + 1 ) * MAX_RESULTS_PER_PAGE > total) {
+				index = total / MAX_RESULTS_PER_PAGE;
+				displayFrom = total - MAX_RESULTS_PER_PAGE;
 				displayTo =  total;	
 			}			
 			
-			computers = GestionComputerService.getInstance().getComputers(index, new OptionsRequest(nameFilter, sort));
+			computers = GestionComputerService.getInstance().getComputers(index, MAX_RESULTS_PER_PAGE, new OptionsRequest(nameFilter, sort));
 			currentIndex = Integer.toString(index);
 			
 		}
