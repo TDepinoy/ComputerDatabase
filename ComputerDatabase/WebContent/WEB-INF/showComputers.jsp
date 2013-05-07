@@ -22,7 +22,7 @@
 	<section id="main">
 
 
-		<h1>${totalComputers} computers found</h1>
+		<h1>${page.totalResults} computers found</h1>
 
 		<div id="actions">
 			<form action="showComputers" method="GET">
@@ -46,7 +46,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="c" items="${computers}">
+				<c:forEach var="c" items="${page.computers}">
 					<tr>
 						<td><a href="updateComputer?idComputer=${c.id}">${c.name}</a></td>
 						<td>${c.introduced}</td>
@@ -61,21 +61,19 @@
 		<div id="pagination" class="pagination">
 			<ul>
 				<c:choose>
-					<c:when test="${from ne 1}">
-						<li class="prev"><a
-							href="showComputers?currentIndex=${currentIndex - 1}">&larr; Previous</a></li>
+					<c:when test="${not page.firstPage}">
+						<li class="prev"><a href="showComputers?p=${page.numPage - 1}">&larr; Previous</a></li>
 					</c:when>
 					<c:otherwise>
 						<li class="prev disabled"><a>&larr; Previous</a></li>
 					</c:otherwise>
 				</c:choose>
 
-				<li class="current"><a>Displaying ${from} to ${to} of ${totalComputers}</a></li>
+				<li class="current"><a>Displaying ${page.displayFrom} to ${page.displayTo} of ${page.totalResults}</a></li>
 
 				<c:choose>
-					<c:when test="${to ne totalComputers}">
-						<li class="next"><a
-							href="showComputers?currentIndex=${currentIndex + 1}&filter=${filter}&s=${s}">Next &rarr;</a></li>
+					<c:when test="${not page.lastPage}">
+						<li class="next"><a href="showComputers?p=${page.numPage + 1}&filter=${filter}&s=${s}">Next &rarr;</a></li>
 					</c:when>
 					<c:otherwise>
 						<li class="next disabled"><a>Next &rarr;</a></li>

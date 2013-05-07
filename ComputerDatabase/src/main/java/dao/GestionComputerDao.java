@@ -211,7 +211,7 @@ public class GestionComputerDao {
 			StringBuilder sb = new StringBuilder (COUNT_COMPUTERS);
 			
 			if (!StringUtils.isNullOrEmpty(filter)) 
-				f.format(WHERE_FILTER_NAME_STR, new StringBuilder().append("'%").append(filter).append("%'"));
+				f.format(WHERE_FILTER_NAME_STR, new StringBuilder().append(filter));
 			
 			sb.append(f.toString());
 

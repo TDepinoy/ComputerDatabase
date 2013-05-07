@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,11 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.mysql.jdbc.StringUtils;
-
-import service.GestionComputerService;
 import utils.OptionsRequest;
-import entites.Computer;
+import utils.Page;
 
 /**
  * Servlet implementation class ShowComputerListServlet
@@ -27,67 +23,30 @@ public class ShowComputerListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		List<Computer> computers;
-		
+				
 		int sort;
-		String currentIndex = request.getParameter("currentIndex");
+		int pageNumber = 0;
+		String page = request.getParameter("p");
 		String nameFilter = request.getParameter("filter");
-		
-		int total = GestionComputerService.getInstance().countComputers(nameFilter);
 		
 		try {
 			sort = Integer.parseInt(request.getParameter("s"));
 		} catch (NumberFormatException e) {
 			sort = 1;
 		}
-		
-		int displayFrom = 0;
-		int displayTo = 0;
-		
-		if (currentIndex == null) {
-			displayFrom = 1;
-			displayTo = MAX_RESULTS_PER_PAGE;
-			computers = GestionComputerService.getInstance().getComputers(0, MAX_RESULTS_PER_PAGE, new OptionsRequest(nameFilter, sort));
-			request.setAttribute("currentIndex", 0);
-		}
-		else {
 			
-			int index = 0;
-			
-			try {
-				index = Integer.parseInt(currentIndex);
-			} catch (RuntimeException e) {
-				e.printStackTrace();
-			}
-			
-			displayFrom = index * MAX_RESULTS_PER_PAGE + 1;
-			displayTo = (index + 1 )* MAX_RESULTS_PER_PAGE;
-			
-			
-			if (index < 0) {
-				index = 0;
-				displayFrom = 1;
-				displayTo =  MAX_RESULTS_PER_PAGE;
-			}
-			else if ( (index + 1 ) * MAX_RESULTS_PER_PAGE > total) {
-				index = total / MAX_RESULTS_PER_PAGE;
-				displayFrom = total - MAX_RESULTS_PER_PAGE;
-				displayTo =  total;	
-			}			
-			
-			computers = GestionComputerService.getInstance().getComputers(index, MAX_RESULTS_PER_PAGE, new OptionsRequest(nameFilter, sort));
-			currentIndex = Integer.toString(index);
-			
+		try {
+			pageNumber = Integer.parseInt(page);
+		} catch (NumberFormatException e) {
+			pageNumber = 0;
 		}
 		
+		
+		Page p = new Page (pageNumber, new OptionsRequest(nameFilter, sort));
+		System.out.println(p);
+		request.setAttribute("page", p);
 		request.setAttribute("s", sort);
 		request.setAttribute("filter", nameFilter);
-		request.setAttribute("currentIndex", currentIndex);
-		request.setAttribute("from", displayFrom);
-		request.setAttribute("to", displayTo);
-		request.setAttribute("computers", computers);
-		request.setAttribute("totalComputers", total);
 		request.getServletContext().getRequestDispatcher("/WEB-INF/showComputers.jsp").forward(request, response);
 	}
 }
