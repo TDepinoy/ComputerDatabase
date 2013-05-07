@@ -54,6 +54,8 @@
 					<div class="input">
 						<select id="company" name="company">
 
+							<option class="blank" value="">-- Choose a company --</option>
+
 							<c:forEach var="c" items="${companies}">
 								<option value="${c.id}" >${c.name}</option>		
 							</c:forEach>

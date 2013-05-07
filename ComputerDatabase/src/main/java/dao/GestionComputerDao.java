@@ -161,9 +161,8 @@ public class GestionComputerDao {
 			f.format(ORDER_BY_LIMIT_STR, or.getOrderC().toString(), or.getOrderW().toString(), start, maxResults);
 			sb.append(f.toString());
 			
-			System.out.println(sb.toString());
 			pt = conn.prepareStatement(sb.toString());			
-			
+						
 			ResultSet res = pt.executeQuery();
 
 			while (res.next()) {

@@ -43,7 +43,7 @@ public class ShowComputerListServlet extends HttpServlet {
 		
 		
 		Page p = new Page (pageNumber, new OptionsRequest(nameFilter, sort));
-		System.out.println(p);
+
 		request.setAttribute("page", p);
 		request.setAttribute("s", sort);
 		request.setAttribute("filter", nameFilter);
