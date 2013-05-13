@@ -26,12 +26,12 @@ public class Page {
 		else
 			this.numPage = numPage;
 		
-		this.computers = GestionComputerService.getInstance().getComputers(this.numPage, ShowComputerListServlet.MAX_RESULTS_PER_PAGE, sortOptions);
-		
 		computeIsLastPage();
 		computeIsFirstPage();
 		computeDisplayTo();
 		computeDisplayFrom();
+		
+		this.computers = GestionComputerService.getInstance().getComputers(displayFrom, ShowComputerListServlet.MAX_RESULTS_PER_PAGE, sortOptions);
 	}
 	
 	private void computeDisplayTo () {

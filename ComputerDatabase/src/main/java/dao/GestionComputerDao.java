@@ -63,18 +63,59 @@ public class GestionComputerDao {
 	}
 
 	public void insertOrUpdateComputer(Computer c) {
+		
+		if (c.getId() > 0) 
+			updateComputer(c);	
+		else 
+			insertComputer(c);
+	}
+	
+	public void insertComputer (Computer c) {
 		Connection conn = JdbcConnection.getConnection();
 		PreparedStatement pt = null;
 		try {
-			if (c.getId() > 0) {
-				pt = conn.prepareStatement(UPDATE_ONE_COMPUTER);
-				pt.setInt(5, c.getId());
-			}
-			else {
-				pt = conn.prepareStatement(INSERT_ONE_COMPUTER);
-			}
 			
+			pt = conn.prepareStatement(INSERT_ONE_COMPUTER);
+			pt.setString(1, c.getName());		
+			
+			if (c.getIntroduced() != null)
+				pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
+			else
+				pt.setDate(2, null);
+			
+			if(c.getDiscontinued() != null)
+				pt.setDate(3, new java.sql.Date(c.getDiscontinued().getTime()));
+			else
+				pt.setDate(3, null);
+			
+			if (c.getCompany() != null)
+				pt.setInt(4, c.getCompany().getId());
+			else
+				pt.setNull(4, Types.NULL);
+					
+			pt.executeUpdate();
+			
+		} catch (SQLException e) {
+			Logger.getLogger("main").log(Level.SEVERE, "Erreur de syntaxe SQL");
+			e.printStackTrace();
+		} finally {
+			JdbcConnection.closeConnection(conn);
+
+			try {
+				pt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void updateComputer (Computer c) {
+		Connection conn = JdbcConnection.getConnection();
+		PreparedStatement pt = null;
+		try {
+			pt = conn.prepareStatement(UPDATE_ONE_COMPUTER);
 			pt.setString(1, c.getName());
+			pt.setInt(5, c.getId());			
 			
 			if (c.getIntroduced() != null)
 				pt.setDate(2, new java.sql.Date(c.getIntroduced().getTime()));
@@ -162,7 +203,7 @@ public class GestionComputerDao {
 			sb.append(f.toString());
 			
 			pt = conn.prepareStatement(sb.toString());			
-						
+			
 			ResultSet res = pt.executeQuery();
 
 			while (res.next()) {

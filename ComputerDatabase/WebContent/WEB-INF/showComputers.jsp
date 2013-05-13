@@ -49,18 +49,17 @@
 					<thead>
 						<tr>
 							<th
-								class="col2 header ${s eq '1' ? 'headerSortUp' :  s eq '-1' ? 'headerSortDown' : empty s ? 'headerSortUp' : ''}"><a
-								href="showComputers?filter=${filter}&s=${s eq '1' ? '-1' : '1'}">Computer
-									name</a></th>
+								class="col2 header ${s eq '1' ? 'headerSortUp' :  s eq '-1' ? 'headerSortDown' : empty s ? 'headerSortUp' : ''}">
+								<a href="showComputers?filter=${filter}&s=${s eq '1' ? '-1' : '1'}">Computer name</a></th>
 							<th
-								class="col3 header ${s eq '2' ? 'headerSortUp' :  s eq '-2' ? 'headerSortDown' : ''}"><a
-								href="showComputers?filter=${filter}&s=${s eq '2' ? '-2' : '2'}">Introduced</a></th>
+								class="col3 header ${s eq '2' ? 'headerSortUp' :  s eq '-2' ? 'headerSortDown' : ''}">
+								<a href="showComputers?filter=${filter}&s=${s eq '2' ? '-2' : '2'}">Introduced</a></th>
 							<th
-								class="col4 header ${s eq '3' ? 'headerSortUp' :  s eq '-3' ? 'headerSortDown' : ''}"><a
-								href="showComputers?filter=${filter}&s=${s eq '3' ? '-3' : '3'}">Discontinued</a></th>
+								class="col4 header ${s eq '3' ? 'headerSortUp' :  s eq '-3' ? 'headerSortDown' : ''}">
+								<a href="showComputers?filter=${filter}&s=${s eq '3' ? '-3' : '3'}">Discontinued</a></th>
 							<th
-								class="col5 header ${s eq '4' ? 'headerSortUp' :  s eq '-4' ? 'headerSortDown' : ''} "><a
-								href="showComputers?filter=${filter}&s=${s eq '4' ? '-4' : '4'}">Company</a></th>
+								class="col5 header ${s eq '4' ? 'headerSortUp' :  s eq '-4' ? 'headerSortDown' : ''} ">
+								<a href="showComputers?filter=${filter}&s=${s eq '4' ? '-4' : '4'}">Company</a></th>
 
 						</tr>
 					</thead>
@@ -81,7 +80,7 @@
 						<c:choose>
 							<c:when test="${not page.firstPage}">
 								<li class="prev"><a
-									href="showComputers?p=${page.numPage - 1}">&larr; Previous</a></li>
+									href="showComputers?p=${page.numPage - 1}&filter=${filter}&s=${s}">&larr; Previous</a></li>
 							</c:when>
 							<c:otherwise>
 								<li class="prev disabled"><a>&larr; Previous</a></li>
