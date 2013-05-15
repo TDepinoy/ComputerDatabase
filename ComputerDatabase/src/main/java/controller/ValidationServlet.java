@@ -5,14 +5,15 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import service.ComputerServiceImpl;
 import service.ComputerService;
@@ -28,6 +29,8 @@ import entites.Computer;
 @WebServlet("/validationServlet")
 public class ValidationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = LoggerFactory.getLogger(ValidationServlet.class);
 	
 	private static final String standardClass = "clearfix ";
 	private static final String errorClass = "clearfix error";
@@ -77,8 +80,7 @@ public class ValidationServlet extends HttpServlet {
 				request.setAttribute("classIntroduced", standardClass);
 			}
 		} catch (ParseException e) {
-			Logger.getLogger("main").log(Level.SEVERE, "Erreur de parsing de date");
-			e.printStackTrace();
+			logger.warn("Erreur lors du parsing de la date introduced " + e.getMessage());
 			request.setAttribute("classIntroduced", errorClass);
 			error = true;
 		} 
@@ -92,8 +94,7 @@ public class ValidationServlet extends HttpServlet {
 				request.setAttribute("classDiscontinued", standardClass);
 			}
 		} catch (ParseException e) {
-			Logger.getLogger("main").log(Level.SEVERE, "Erreur de parsing de date");
-			e.printStackTrace();
+			logger.warn("Erreur lors du parsing de la date discontinued " + e.getMessage());
 			request.setAttribute("classDiscontinued", errorClass);
 			error = true;
 		}

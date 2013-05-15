@@ -2,10 +2,6 @@ package utils;
 
 import java.util.List;
 
-import controller.ShowComputerListServlet;
-
-import service.ComputerServiceImpl;
-
 import entites.Computer;
 
 public class Page {

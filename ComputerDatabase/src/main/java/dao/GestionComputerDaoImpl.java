@@ -9,13 +9,9 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import utils.OptionsRequest;
 
 import com.mysql.jdbc.StringUtils;
-
-import utils.JdbcConnection;
-import utils.OptionsRequest;
 
 import entites.Company;
 import entites.Computer;
