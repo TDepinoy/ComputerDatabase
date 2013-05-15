@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import entites.Computer;
 
-import service.GestionComputerService;
+import service.ComputerServiceImpl;
 import utils.OptionsRequest;
 import utils.Page;
 
@@ -46,7 +46,7 @@ public class ShowComputerListServlet extends HttpServlet {
 			pageNumber = 0;
 		}
 		
-		Page p = GestionComputerService.getInstance().createPage (pageNumber, MAX_RESULTS_PER_PAGE, new OptionsRequest(nameFilter, sort));
+		Page p = ComputerServiceImpl.getInstance().createPage (pageNumber, MAX_RESULTS_PER_PAGE, new OptionsRequest(nameFilter, sort));
 
 		request.setAttribute("page", p);
 		request.setAttribute("s", sort);

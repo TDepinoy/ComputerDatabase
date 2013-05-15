@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import entites.Company;
 import entites.Computer;
 
-import service.GestionComputerService;
+import service.ComputerServiceImpl;
 
 /**
  * Servlet implementation class UpdateComputerServlet
@@ -20,32 +20,27 @@ import service.GestionComputerService;
 @WebServlet("/updateComputer")
 public class UpdateComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	private static final String ADD_COMPUTER_URL = "/WEB-INF/addComputer.jsp";
-	private static final String UPDATE_COMPUTER_URL = "/WEB-INF/updateComputer.jsp";
-	
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		GestionComputerService service = GestionComputerService.getInstance();
-	
-		String url;
+		int idComputer = 0;
 		
-		if (request.getParameter("idComputer") == null) {
-			url = ADD_COMPUTER_URL;
+		try {
+			idComputer = Integer.parseInt(request.getParameter("idComputer"));
+			
+			Computer c = ComputerServiceImpl.getInstance().getComputer(idComputer);
+			List<Company> companies = ComputerServiceImpl.getInstance().getCompanies();
+			
+			request.setAttribute("computer", c);		
+			request.setAttribute("companies", companies);
+			
+			request.getServletContext().getRequestDispatcher("/WEB-INF/updateComputer.jsp").forward(request, response);
+			
+		} catch (NumberFormatException e) {
+			response.sendRedirect("showComputers");
 		}
-		else {
-			Computer c = service.getComputer(Integer.parseInt(request.getParameter("idComputer")));
-			request.setAttribute("computer", c);
-			url = UPDATE_COMPUTER_URL;
-		}
-		
-		List<Company> companies = service.getCompanies();		
-		request.setAttribute("companies", companies);
-				
-		request.getServletContext().getRequestDispatcher(url).forward(request, response);
 	}
 }

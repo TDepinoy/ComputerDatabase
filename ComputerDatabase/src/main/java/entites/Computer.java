@@ -14,7 +14,6 @@ public class Computer {
 	
 	public Computer(int id, String name, Date introduced, Date discontinued,
 			Company company) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;

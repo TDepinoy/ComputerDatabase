@@ -18,7 +18,6 @@ public class JdbcConnection {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Impossible de charger le driver JDBC");
-			e.printStackTrace();
 		}
 	}
 	
@@ -27,7 +26,6 @@ public class JdbcConnection {
 			return DriverManager.getConnection(URL, USERNAME, PWD);
 		} catch (SQLException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Impossible d'initialiser la connection");
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -37,7 +35,6 @@ public class JdbcConnection {
 			conn.close();
 		} catch (SQLException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Impossible de fermer la connection");
-			e.printStackTrace();
 		}
 	}
 }

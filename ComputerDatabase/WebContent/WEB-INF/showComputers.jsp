@@ -33,7 +33,7 @@
 
 			</form>
 
-			<a class="btn success" id="add" href="updateComputer">Add a new computer</a>
+			<a class="btn success" id="add" href="addComputer">Add a new computer</a>
 		</div>
 
 		<c:choose>

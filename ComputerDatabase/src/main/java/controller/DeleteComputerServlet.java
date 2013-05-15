@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import service.GestionComputerService;
+import service.ComputerServiceImpl;
+import service.ComputerService;
 
 /**
  * Servlet implementation class DeleteComputerServlet
@@ -20,7 +21,7 @@ public class DeleteComputerServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		GestionComputerService service = GestionComputerService.getInstance();
+		ComputerService service = ComputerServiceImpl.getInstance();
 		int idComputer = Integer.parseInt(request.getParameter("idComputer"));	
 		service.deleteComputer(idComputer);
 		

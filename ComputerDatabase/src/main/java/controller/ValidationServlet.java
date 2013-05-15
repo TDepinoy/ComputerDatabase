@@ -14,7 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import service.GestionComputerService;
+import service.ComputerServiceImpl;
+import service.ComputerService;
 
 import com.mysql.jdbc.StringUtils;
 
@@ -38,7 +39,7 @@ public class ValidationServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		boolean error = false;
-		GestionComputerService service = GestionComputerService.getInstance();
+		ComputerService service = ComputerServiceImpl.getInstance();
 		Company cy;
 		Computer c = new Computer();
 

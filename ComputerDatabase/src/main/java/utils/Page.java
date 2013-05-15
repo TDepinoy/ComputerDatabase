@@ -4,7 +4,7 @@ import java.util.List;
 
 import controller.ShowComputerListServlet;
 
-import service.GestionComputerService;
+import service.ComputerServiceImpl;
 
 import entites.Computer;
 
