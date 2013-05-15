@@ -27,7 +27,10 @@ public class GestionComputerDao {
 	private static final String DELETE_ONE_COMPUTER = "DELETE FROM computer WHERE id=?";
 	private static final String UPDATE_ONE_COMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 	private static final String COUNT_COMPUTERS = "SELECT COUNT(c.id) as total FROM computer as c";
-	private static final String WHERE_FILTER_NAME_STR = " WHERE c.name LIKE %s";
+	private static final String WHERE_FILTER_NAME_STR = " WHERE c.name LIKE ?";
+	/**
+	 * 1$: colonne sur laquelle s'effectue le tri, 2$: Ordre de tri (asc/desc)
+	 */
 	private static final String ORDER_BY_LIMIT_STR = " ORDER BY ISNULL (%1$s), %1$s %2$s LIMIT %3$d, %4$d";
 	
 	
@@ -62,8 +65,7 @@ public class GestionComputerDao {
 		}
 	}
 
-	public void insertOrUpdateComputer(Computer c) {
-		
+	public void insertOrUpdateComputer(Computer c) {		
 		if (c.getId() > 0) 
 			updateComputer(c);	
 		else 
@@ -197,15 +199,20 @@ public class GestionComputerDao {
 			StringBuilder sb = new StringBuilder (SELECT_ALL_COMPUTERS);
 			
 			if (!StringUtils.isNullOrEmpty(or.getNameFilter())) 
-				f.format(WHERE_FILTER_NAME_STR, or.getNameFilter());		
+				sb.append(WHERE_FILTER_NAME_STR);		
 			
-			f.format(ORDER_BY_LIMIT_STR, or.getOrderC().toString(), or.getOrderW().toString(), start, maxResults);
+			f.format(ORDER_BY_LIMIT_STR, or.getOrderC(), or.getOrderW(), start, maxResults);
 			sb.append(f.toString());
 			
-			pt = conn.prepareStatement(sb.toString());			
+			pt = conn.prepareStatement(sb.toString());
+			
+			if (!StringUtils.isNullOrEmpty(or.getNameFilter())) 
+				pt.setString(1, or.getNameFilter());
 			
 			ResultSet res = pt.executeQuery();
 
+			System.out.println(pt.toString());
+			
 			while (res.next()) {
 				Computer c = new Computer();
 				Company cy = new Company();
@@ -251,12 +258,15 @@ public class GestionComputerDao {
 			StringBuilder sb = new StringBuilder (COUNT_COMPUTERS);
 			
 			if (!StringUtils.isNullOrEmpty(filter)) 
-				f.format(WHERE_FILTER_NAME_STR, new StringBuilder().append(filter));
+				sb.append(WHERE_FILTER_NAME_STR);
 			
 			sb.append(f.toString());
 
 			pt = conn.prepareStatement(sb.toString());
 
+			if (!StringUtils.isNullOrEmpty(filter))
+				pt.setString(1, filter);
+				
 			ResultSet res = pt.executeQuery();
 			res.first();
 			

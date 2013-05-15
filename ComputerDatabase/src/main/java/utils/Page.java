@@ -12,44 +12,43 @@ public class Page {
 	
 	private int numPage;
 	private int totalResults;
+	private int maxResults;
 	private boolean lastPage;
 	private boolean firstPage;
 	private int displayFrom;
 	private int displayTo;
 	private List<Computer> computers;
 	
-	public Page (int numPage, OptionsRequest sortOptions) {
-		this.totalResults = GestionComputerService.getInstance().countComputers(sortOptions.getNameFilter());	
+	public Page (int numPage, int maxResults, int totalResults, List<Computer> computers) {
+		this.totalResults = totalResults;
+		this.maxResults = maxResults;
 		
-		if (numPage < 0 || (numPage > 0 && (totalResults - numPage * ShowComputerListServlet.MAX_RESULTS_PER_PAGE < 0) ))
-			this.numPage = 0;
-		else
-			this.numPage = numPage;
+		this.numPage = numPage;
 		
 		computeIsLastPage();
 		computeIsFirstPage();
 		computeDisplayTo();
 		computeDisplayFrom();
 		
-		this.computers = GestionComputerService.getInstance().getComputers(displayFrom, ShowComputerListServlet.MAX_RESULTS_PER_PAGE, sortOptions);
+		this.computers = computers;
 	}
 	
 	private void computeDisplayTo () {
-		if ( ((numPage + 1 )* ShowComputerListServlet.MAX_RESULTS_PER_PAGE) > totalResults )
+		if ( ((numPage + 1 )* maxResults) > totalResults )
 			this.displayTo = totalResults;
 		else
-			this.displayTo = (numPage + 1 )* ShowComputerListServlet.MAX_RESULTS_PER_PAGE;
+			this.displayTo = (numPage + 1 )* maxResults;
 	}
 	
 	private void  computeDisplayFrom () {
 		if (totalResults == 0)
 			this.displayFrom = 0;
 		else
-			this.displayFrom = numPage * ShowComputerListServlet.MAX_RESULTS_PER_PAGE + 1;
+			this.displayFrom = numPage * maxResults + 1;
 	}
 	
 	private void computeIsLastPage () {
-		if (totalResults - (numPage + 1) * ShowComputerListServlet.MAX_RESULTS_PER_PAGE < 1)
+		if (totalResults - (numPage + 1) * maxResults < 1)
 			lastPage = true;
 		else
 			lastPage = false;

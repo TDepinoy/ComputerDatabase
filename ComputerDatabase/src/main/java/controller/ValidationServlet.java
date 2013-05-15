@@ -73,6 +73,7 @@ public class ValidationServlet extends HttpServlet {
 				df.setLenient(false);
 				Date introduced = df.parse(request.getParameter("introduced"));
 				c.setIntroduced(introduced);
+				request.setAttribute("classIntroduced", standardClass);
 			}
 		} catch (ParseException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Erreur de parsing de date");
@@ -87,6 +88,7 @@ public class ValidationServlet extends HttpServlet {
 				df.setLenient(false);
 				Date introduced = df.parse(request.getParameter("discontinued"));
 				c.setIntroduced(introduced);
+				request.setAttribute("classDiscontinued", standardClass);
 			}
 		} catch (ParseException e) {
 			Logger.getLogger("main").log(Level.SEVERE, "Erreur de parsing de date");

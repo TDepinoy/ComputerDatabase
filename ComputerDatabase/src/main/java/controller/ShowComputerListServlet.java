@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import entites.Computer;
+
+import service.GestionComputerService;
 import utils.OptionsRequest;
 import utils.Page;
 
@@ -23,7 +27,8 @@ public class ShowComputerListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-				
+		
+		
 		int sort;
 		int pageNumber = 0;
 		String page = request.getParameter("p");
@@ -41,8 +46,7 @@ public class ShowComputerListServlet extends HttpServlet {
 			pageNumber = 0;
 		}
 		
-		
-		Page p = new Page (pageNumber, new OptionsRequest(nameFilter, sort));
+		Page p = GestionComputerService.getInstance().createPage (pageNumber, MAX_RESULTS_PER_PAGE, new OptionsRequest(nameFilter, sort));
 
 		request.setAttribute("page", p);
 		request.setAttribute("s", sort);

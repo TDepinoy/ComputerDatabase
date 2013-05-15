@@ -3,6 +3,7 @@ package service;
 import java.util.List;
 
 import utils.OptionsRequest;
+import utils.Page;
 
 import dao.GestionCompanyDao;
 import dao.GestionComputerDao;
@@ -54,6 +55,15 @@ public class GestionComputerService {
 	
 	public Company getCompany (int id) {
 		return daoCy.getCompany(id);
+	}
+	
+	public Page createPage (int numPage, int maxResults, OptionsRequest or) {
+		int totalResults = countComputers(or.getNameFilter());
+		
+		if (numPage < 0 || (numPage > 0 && (totalResults - numPage * maxResults < 0)))
+			numPage = 0;
+		
+		return new Page (numPage, maxResults, totalResults, getComputers(numPage * maxResults, maxResults, or));
 	}
 	
 }

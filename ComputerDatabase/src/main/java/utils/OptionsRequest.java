@@ -4,11 +4,11 @@ import com.mysql.jdbc.StringUtils;
 
 public class OptionsRequest {
 	
-	public enum OrderWay {
+	private enum OrderWay {
 		ASC, DESC
 	}
 	
-	public enum OrderColumn {
+	private enum OrderColumn {
 		NAME("c.name"), INTRODUCED("c.introduced"), DISCONTINUED("c.discontinued"), COMPANY_NAME("cy.name");
 		
 		private String field;
@@ -27,10 +27,9 @@ public class OptionsRequest {
 	private OrderColumn orderC;
 	
 	public OptionsRequest(String nameFilter, int sort) {
-		super();		
 		
 		if (!StringUtils.isNullOrEmpty(nameFilter))
-			this.nameFilter = new StringBuilder().append("'%").append(nameFilter).append("%'").toString();
+			this.nameFilter = new StringBuilder().append("%").append(nameFilter).append("%").toString();
 		
 		setSort(sort);
 	
@@ -63,11 +62,11 @@ public class OptionsRequest {
 		return nameFilter;
 	}
 
-	public OrderWay getOrderW() {
-		return orderW;
+	public String getOrderW() {
+		return orderW.toString();
 	}
 
-	public OrderColumn getOrderC() {
-		return orderC;
+	public String getOrderC() {
+		return orderC.toString();
 	}
 }
