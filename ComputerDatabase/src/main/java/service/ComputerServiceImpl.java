@@ -23,6 +23,7 @@ public class ComputerServiceImpl implements ComputerService {
 	private static final Logger logger = LoggerFactory.getLogger(ComputerServiceImpl.class);
 	
 	private static ComputerService service;
+	
 	private GestionComputerDao dao;
 	private GestionCompanyDao daoCy;
 	
