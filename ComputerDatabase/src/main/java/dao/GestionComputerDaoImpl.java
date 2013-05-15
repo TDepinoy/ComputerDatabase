@@ -21,10 +21,6 @@ import entites.Company;
 import entites.Computer;
 
 public class GestionComputerDaoImpl implements GestionComputerDao {
-
-	
-	private final static Logger logger = LoggerFactory.getLogger(GestionComputerDaoImpl.class);
-	
 	
 	private static final String SELECT_ALL_COMPUTERS = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id ";
 	private static final String SELECT_ONE_COMPUTER = "SELECT c.id, c.name, c.introduced, c.discontinued, cy.id, cy.name from computer c LEFT JOIN company cy ON c.company_id=cy.id WHERE c.id=?";

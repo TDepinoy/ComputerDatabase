@@ -2,13 +2,16 @@ package utils;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import java.sql.Connection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class JdbcConnection {
 		
+	private static final Logger logger = LoggerFactory.getLogger(JdbcConnection.class);
+	
 	public static final String USERNAME = "root";
 	public static final String PWD = "root";
 	public static final String URL = "jdbc:mysql://localhost:3306/ComputerDataBase";
@@ -17,7 +20,7 @@ public class JdbcConnection {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			Logger.getLogger("main").log(Level.SEVERE, "Impossible de charger le driver JDBC");
+			logger.error("Impossible de charger le driver JDBC " + e.getMessage());
 		}
 	}
 	
@@ -25,7 +28,7 @@ public class JdbcConnection {
 		try {
 			return DriverManager.getConnection(URL, USERNAME, PWD);
 		} catch (SQLException e) {
-			Logger.getLogger("main").log(Level.SEVERE, "Impossible d'initialiser la connection");
+			logger.error("Impossible d'établir une connexion" + e.getMessage());
 		}
 		return null;
 	}
@@ -34,7 +37,7 @@ public class JdbcConnection {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			Logger.getLogger("main").log(Level.SEVERE, "Impossible de fermer la connection");
+			logger.error("Erreur lors de la fermeture de la connexion" + e.getMessage());
 		}
 	}
 }
