@@ -54,7 +54,8 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			pt.setInt(1, id);
 			pt.executeUpdate();
 		} finally {
-			pt.close();
+			if (pt != null)
+				pt.close();
 		}
 	}
 
@@ -92,7 +93,8 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			pt.executeUpdate();
 			
 		} finally {
-			pt.close();
+			if (pt != null)
+				pt.close();
 		}
 	}
 	
@@ -122,7 +124,8 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			pt.executeUpdate();
 			
 		} finally {
-			pt.close();			
+			if (pt != null)
+				pt.close();		
 		}
 	}
 
@@ -150,7 +153,8 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			c.setCompany(cy);
 
 		} finally {
-			pt.close();
+			if (pt != null)
+				pt.close();
 		}
 
 		return c;
@@ -195,8 +199,10 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 				computers.add(c);
 			}
 		} finally {
-			f.close();
-			pt.close();
+			if (f != null)
+				f.close();
+			if (pt != null)
+				pt.close();
 		}
 
 		return computers;
@@ -230,8 +236,10 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			total = res.getInt("total");
 			
 		} finally {
-			f.close();
-			pt.close();
+			if (f != null)
+				f.close();
+			if (pt != null)
+				pt.close();
 		}
 		
 		return total;

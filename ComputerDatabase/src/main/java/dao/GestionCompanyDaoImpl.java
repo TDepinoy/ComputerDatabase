@@ -46,7 +46,8 @@ public class GestionCompanyDaoImpl implements GestionCompanyDao {
 				companies.add(cy);
 			}
 		} finally {
-			pt.close();
+			if (pt != null)
+				pt.close();
 		}
 
 		return companies;
@@ -67,7 +68,8 @@ public class GestionCompanyDaoImpl implements GestionCompanyDao {
 			c.setId(res.getInt("id"));
 			c.setName(res.getString("name"));
 		} finally {
-			pt.close();
+			if (pt != null)
+				pt.close();
 		}
 
 		return c;
