@@ -1,11 +1,12 @@
 package dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import utils.JdbcConnection;
 
 import entites.Company;
 
@@ -25,12 +26,12 @@ public class GestionCompanyDaoImpl implements GestionCompanyDao {
 	}
 	
 	@Override
-	public List<Company> getCompanies(Connection conn) throws SQLException {
+	public List<Company> getCompanies() throws SQLException {
 		PreparedStatement pt = null;
 		List<Company> companies = new ArrayList<Company>();
 
 		try {
-			pt = conn.prepareStatement(SELECT_ALL_COMPANIES);
+			pt = JdbcConnection.getInstance().getConnection().prepareStatement(SELECT_ALL_COMPANIES);
 			ResultSet res = pt.executeQuery();
 
 			while (res.next()) {
@@ -50,12 +51,12 @@ public class GestionCompanyDaoImpl implements GestionCompanyDao {
 	}
 	
 	@Override
-	public Company getCompany(Connection conn, int id) throws SQLException {
+	public Company getCompany(int id) throws SQLException {
 		Company c = new Company();
 		PreparedStatement pt = null;
 
 		try {
-			pt = conn.prepareStatement(SELECT_ONE_COMPANY);
+			pt = JdbcConnection.getInstance().getConnection().prepareStatement(SELECT_ONE_COMPANY);
 			pt.setInt(1, id);
 			ResultSet res = pt.executeQuery();
 

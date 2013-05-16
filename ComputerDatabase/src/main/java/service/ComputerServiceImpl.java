@@ -1,6 +1,5 @@
 package service;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import utils.JdbcConnection;
 import utils.OptionsRequest;
-import utils.Page;
 
 import dao.GestionCompanyDaoImpl;
 import dao.GestionCompanyDao;
@@ -17,6 +15,7 @@ import dao.GestionComputerDao;
 import dao.GestionComputerDaoImpl;
 import entites.Company;
 import entites.Computer;
+import entites.Page;
 
 public class ComputerServiceImpl implements ComputerService {
 	
@@ -41,101 +40,146 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 	
 	@Override
-	public Computer getComputer (int id) {
-		Connection conn = JdbcConnection.getConnection();
+	public Computer getComputer (int id) {	
 		Computer c = null;
 		
 		try {
-			c = dao.getComputer(conn, id);
+			c = dao.getComputer(id);
+			JdbcConnection.getInstance().getConnection().commit();
 		} catch (SQLException e) {
-			logger.warn(e.getMessage());
+			logger.warn("Erreur lors de la récupération du computer " + e.getMessage());
+			
+			try {
+				JdbcConnection.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				logger.warn("Erreur lors du rollback de la récupération d'un computer " + e.getMessage());
+			}
 		}
 		
-		JdbcConnection.closeConnection(conn);
+		JdbcConnection.getInstance().closeConnection();
 		return c;
 	}
 	
 	@Override
 	public List<Computer> getComputers(int start, int maxResults, OptionsRequest or) {
-		Connection conn = JdbcConnection.getConnection();
 		List<Computer> computers = null;
 		
 		try {
-			computers = dao.getComputers(conn, start, maxResults, or);
+			computers = dao.getComputers(start, maxResults, or);
+			JdbcConnection.getInstance().getConnection().commit();
 		} catch (SQLException e) {
-			logger.warn(e.getMessage());
+			logger.warn("Erreur lors de l'obtention de la liste des computers " + e.getMessage());
+			
+			try {
+				JdbcConnection.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				logger.warn("Erreur lors du rollback de l'obtention de la liste des computers " + e.getMessage());
+			}
 		}
 		
-		JdbcConnection.closeConnection(conn);
+		JdbcConnection.getInstance().closeConnection();
 		return computers;
 	}
 	
 	@Override
 	public int countComputers(String filter) {
-		Connection conn = JdbcConnection.getConnection();
 		int totalResults = 0;
 		
 		try {
-			totalResults = dao.countComputers(conn, filter);
+			totalResults = dao.countComputers(filter);
+			JdbcConnection.getInstance().getConnection().commit();
 		} catch (SQLException e) {
-			logger.warn(e.getMessage());
+			logger.warn("Erreur lors du count computers" + e.getMessage());
+			
+			try {
+				JdbcConnection.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				logger.warn("Erreur lors du rollback du count " + e.getMessage());
+			}
 		}
 		
-		JdbcConnection.closeConnection(conn);
+		JdbcConnection.getInstance().closeConnection();
 		return totalResults;
 	}
 
 	@Override
 	public void insertOrUpdateComputer (Computer c) {
-		Connection conn = JdbcConnection.getConnection();
 		
 		try {
-			dao.insertOrUpdateComputer(conn, c);
+			dao.insertOrUpdateComputer(c);
+			JdbcConnection.getInstance().getConnection().commit();
 		} catch (SQLException e) {
-			logger.warn(e.getMessage());
+			
+			logger.warn("Erreur lors de l'insertion ou la mise à jour d'un computer " + e.getMessage());
+			
+			try {
+				JdbcConnection.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				logger.warn("Erreur lors du rollback de l'insertion ou update " + e.getMessage());
+			}
 		}
 		
-		JdbcConnection.closeConnection(conn);	
+		JdbcConnection.getInstance().closeConnection();	
 	}
 	
 	@Override
 	public void deleteComputer (int id) {
-		Connection conn = JdbcConnection.getConnection();
 		
 		try {
-			dao.deleteComputer(conn, id);
+			dao.deleteComputer(id);
+			JdbcConnection.getInstance().getConnection().commit();
 		} catch (SQLException e) {
-			logger.warn(e.getMessage());
+			logger.warn("Erreur lors de la suppression du computer " + e.getMessage());
+			
+			try {
+				JdbcConnection.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				logger.warn("Erreur lors du rollback de la suppresion d'un computer " + e.getMessage());
+			}
 		}
-		JdbcConnection.closeConnection(conn);	
+		
+		JdbcConnection.getInstance().closeConnection();
 	}
 	
 	@Override
 	public List<Company> getCompanies () {
-		Connection conn = JdbcConnection.getConnection();
 		List<Company> companies = null;
 		
 		try {
-			companies = daoCy.getCompanies(conn);
+			companies = daoCy.getCompanies();
+			JdbcConnection.getInstance().getConnection().commit();
 		} catch (SQLException e) {
-			logger.warn(e.getMessage());
+			logger.warn("Erreur lors de l'obtention de la liste des companies " + e.getMessage());
+			
+			try {
+				JdbcConnection.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				logger.warn("Erreur lors du rollback de l'obtention de la liste des companies" + e.getMessage());
+			}
 		}
 		
-		JdbcConnection.closeConnection(conn);
+		JdbcConnection.getInstance().closeConnection();
 		return companies;
 	}
 	
 	@Override
 	public Company getCompany (int id) {
-		Connection conn = JdbcConnection.getConnection();
 		Company c = null;
 		
 		try {
-			c = daoCy.getCompany(conn, id);
+			c = daoCy.getCompany(id);
+			JdbcConnection.getInstance().getConnection().commit();
 		} catch (SQLException e) {
-			logger.warn(e.getMessage());
+			logger.warn("Erreur lors de la récupération d'une company " + e.getMessage());
+		
+			try {
+				JdbcConnection.getInstance().getConnection().rollback();
+			} catch (SQLException e1) {
+				logger.warn("Erreur lors du rollback de la récupération d'une company" + e.getMessage());
+			}
 		}
-		JdbcConnection.closeConnection(conn);
+		
+		JdbcConnection.getInstance().closeConnection();
 		return c;
 	}
 	

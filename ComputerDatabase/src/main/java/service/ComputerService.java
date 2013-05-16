@@ -3,9 +3,9 @@ package service;
 import java.util.List;
 
 import utils.OptionsRequest;
-import utils.Page;
 import entites.Company;
 import entites.Computer;
+import entites.Page;
 
 public interface ComputerService {
 

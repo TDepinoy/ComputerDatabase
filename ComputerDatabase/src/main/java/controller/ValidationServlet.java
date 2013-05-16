@@ -83,8 +83,8 @@ public class ValidationServlet extends HttpServlet {
 			if (!StringUtils.isNullOrEmpty(request.getParameter("discontinued"))) {
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				df.setLenient(false);
-				Date introduced = df.parse(request.getParameter("discontinued"));
-				c.setIntroduced(introduced);
+				Date discontinued = df.parse(request.getParameter("discontinued"));
+				c.setDiscontinued(discontinued);
 				request.setAttribute("classDiscontinued", standardClass);
 			}
 		} catch (ParseException e) {

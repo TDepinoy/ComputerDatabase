@@ -16,28 +16,49 @@ public class JdbcConnection {
 	public static final String PWD = "root";
 	public static final String URL = "jdbc:mysql://localhost:3306/ComputerDataBase";
 	
+	private static JdbcConnection jdbcConnection;
+	
+	public ThreadLocal<Connection> session;
+	
 	static {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
+			jdbcConnection = new JdbcConnection();
 		} catch (ClassNotFoundException e) {
 			logger.error("Impossible de charger le driver JDBC " + e.getMessage());
 		}
 	}
 	
-	public static Connection getConnection() {
-		try {
-			return DriverManager.getConnection(URL, USERNAME, PWD);
-		} catch (SQLException e) {
-			logger.error("Impossible d'établir une connexion" + e.getMessage());
-		}
-		return null;
+	private JdbcConnection () {
+		session = new ThreadLocal<Connection> ();
 	}
 	
-	public static void closeConnection (Connection conn) {
+	public static JdbcConnection getInstance () {
+		return jdbcConnection;
+	}
+	
+	public Connection getConnection() {
+
+		if (session.get() == null) {
+			try {
+				Connection conn = DriverManager.getConnection(URL, USERNAME, PWD);
+				conn.setAutoCommit(false);
+				session.set(conn);
+			} catch (SQLException e) {
+				logger.error("Impossible d'établir la connexion " + e.getMessage());
+				return null;
+			}
+		}
+		
+		return session.get();
+	}
+	
+	public void closeConnection () {
 		try {
-			conn.close();
+			session.get().close();
 		} catch (SQLException e) {
 			logger.error("Erreur lors de la fermeture de la connexion" + e.getMessage());
 		}
+		session.remove();
 	}
 }

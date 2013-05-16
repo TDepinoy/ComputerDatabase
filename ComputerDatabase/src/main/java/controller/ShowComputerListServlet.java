@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import entites.Page;
+
 import service.ComputerServiceImpl;
 import utils.OptionsRequest;
-import utils.Page;
 
 /**
  * Servlet implementation class ShowComputerListServlet

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
+import utils.JdbcConnection;
 import utils.OptionsRequest;
 
 import com.mysql.jdbc.StringUtils;
@@ -43,10 +44,10 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	
 
 	@Override
-	public void deleteComputer(Connection conn, int id) throws SQLException {
+	public void deleteComputer(int id) throws SQLException {
 		PreparedStatement pt = null;
 		try {
-			pt = conn.prepareStatement(DELETE_ONE_COMPUTER);
+			pt = JdbcConnection.getInstance().getConnection().prepareStatement(DELETE_ONE_COMPUTER);
 			pt.setInt(1, id);
 			pt.executeUpdate();
 		} finally {
@@ -56,19 +57,19 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	}
 
 	@Override
-	public void insertOrUpdateComputer(Connection conn, Computer c) throws SQLException {		
+	public void insertOrUpdateComputer(Computer c) throws SQLException {		
 		if (c.getId() > 0) 
-			updateComputer(conn, c);	
+			updateComputer(c);	
 		else 
-			insertComputer(conn, c);
+			insertComputer(c);
 	}
 	
 	@Override
-	public void insertComputer (Connection conn, Computer c) throws SQLException {
+	public void insertComputer (Computer c) throws SQLException {
 		PreparedStatement pt = null;
 		try {
 			
-			pt = conn.prepareStatement(INSERT_ONE_COMPUTER);
+			pt = JdbcConnection.getInstance().getConnection().prepareStatement(INSERT_ONE_COMPUTER);
 			pt.setString(1, c.getName());		
 			
 			if (c.getIntroduced() != null)
@@ -95,10 +96,10 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	}
 	
 	@Override
-	public void updateComputer (Connection conn, Computer c) throws SQLException {
+	public void updateComputer (Computer c) throws SQLException {
 		PreparedStatement pt = null;
 		try {
-			pt = conn.prepareStatement(UPDATE_ONE_COMPUTER);
+			pt = JdbcConnection.getInstance().getConnection().prepareStatement(UPDATE_ONE_COMPUTER);
 			pt.setString(1, c.getName());
 			pt.setInt(5, c.getId());			
 			
@@ -126,12 +127,12 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	}
 
 	@Override
-	public Computer getComputer(Connection conn, int id) throws SQLException {
+	public Computer getComputer(int id) throws SQLException {
 		Computer c = new Computer();
 		PreparedStatement pt = null;
 
 		try {
-			pt = conn.prepareStatement(SELECT_ONE_COMPUTER);
+			pt = JdbcConnection.getInstance().getConnection().prepareStatement(SELECT_ONE_COMPUTER);
 			pt.setInt(1, id);
 			ResultSet res = pt.executeQuery();
 
@@ -157,7 +158,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	}
 
 	@Override
-	public List<Computer> getComputers(Connection conn, int start, int maxResults, OptionsRequest or) throws SQLException {
+	public List<Computer> getComputers(int start, int maxResults, OptionsRequest or) throws SQLException {
 		
 		PreparedStatement pt = null;
 		List<Computer> computers = new ArrayList<Computer>();
@@ -172,7 +173,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			f.format(ORDER_BY_LIMIT_STR, or.getOrderC(), or.getOrderW(), start, maxResults);
 			sb.append(f.toString());
 			
-			pt = conn.prepareStatement(sb.toString());
+			pt = JdbcConnection.getInstance().getConnection().prepareStatement(sb.toString());
 			
 			if (!StringUtils.isNullOrEmpty(or.getNameFilter())) 
 				pt.setString(1, or.getNameFilter());
@@ -205,7 +206,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	}
 
 	@Override
-	public int countComputers (Connection conn, String filter) throws SQLException {
+	public int countComputers (String filter) throws SQLException {
 		Formatter f = new Formatter ();
 		
 		PreparedStatement pt = null;
@@ -221,7 +222,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			
 			sb.append(f.toString());
 
-			pt = conn.prepareStatement(sb.toString());
+			pt = JdbcConnection.getInstance().getConnection().prepareStatement(sb.toString());
 
 			if (!StringUtils.isNullOrEmpty(filter))
 				pt.setString(1, filter);

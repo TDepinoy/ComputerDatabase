@@ -1,8 +1,7 @@
-package utils;
+package entites;
 
 import java.util.List;
 
-import entites.Computer;
 
 public class Page {
 	
