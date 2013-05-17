@@ -12,20 +12,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import service.ComputerService;
 import service.ComputerServiceImpl;
 
 import com.mysql.jdbc.StringUtils;
 
-import entites.Company;
 import entites.Computer;
+import exceptions.DataAccessException;
 
 /**
  * Servlet implementation class validationServlet
  */
+@SuppressWarnings("serial")
 @WebServlet("/validationServlet")
 public class ValidationServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = LoggerFactory.getLogger(DeleteComputerServlet.class);
 	
 	private static final String standardClass = "clearfix ";
 	private static final String errorClass = "clearfix error";
@@ -38,7 +43,6 @@ public class ValidationServlet extends HttpServlet {
 
 		boolean error = false;
 		ComputerService service = ComputerServiceImpl.getInstance();
-		Company cy;
 		Computer c = new Computer();
 
 		String idComputer = request.getParameter("idComputer");
@@ -56,15 +60,9 @@ public class ValidationServlet extends HttpServlet {
 		} else {
 			request.setAttribute("className", standardClass);
 			c.setName(name);
-		}
-
-		if (StringUtils.isNullOrEmpty(companyId)) 
-			 cy = null;
-		else 	
-			cy = service.getCompany(Integer.parseInt(companyId));		
+		}		
 		
 		request.setAttribute("classCompany", standardClass);
-		c.setCompany(cy);
 		
 		try {
 			if (!StringUtils.isNullOrEmpty(request.getParameter("introduced"))) {
@@ -92,14 +90,25 @@ public class ValidationServlet extends HttpServlet {
 			error = true;
 		}
 
-		request.setAttribute("computer", c);
-
-		if (error) {
-			request.setAttribute("companies", service.getCompanies());
-			request.getServletContext().getRequestDispatcher("/WEB-INF/updateComputer.jsp").forward(request, response);
-		} else {
-			service.insertOrUpdateComputer(c);
-			response.sendRedirect("showComputers");
+		try {
+			if (!companyId.isEmpty())
+				c.setCompany(service.getCompany(Integer.parseInt(companyId)));
+		
+		
+			request.setAttribute("computer", c);
+	
+			if (error) {
+				request.setAttribute("companies", service.getCompanies());
+				request.getServletContext().getRequestDispatcher("/WEB-INF/updateComputer.jsp").forward(request, response);
+			} else {		
+				service.insertOrUpdateComputer(c);
+				response.sendRedirect("showComputers");
+			}
+		
+		} catch (DataAccessException e) {
+			logger.warn(e.getMessage());
+			request.setAttribute("error", e.getMessage());
+			request.getRequestDispatcher("/WEB-INF/errorPage.jsp").forward(request, response);
 		}
 
 	}

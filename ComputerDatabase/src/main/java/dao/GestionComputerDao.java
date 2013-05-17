@@ -8,13 +8,11 @@ import entites.Computer;
 
 public interface GestionComputerDao {
 
-	void deleteComputer(int id) throws SQLException;
+	int deleteComputer(int id) throws SQLException;
 
-	void insertOrUpdateComputer(Computer c) throws SQLException;
+	int insertComputer(Computer c) throws SQLException;
 
-	void insertComputer(Computer c) throws SQLException;
-
-	void updateComputer(Computer c) throws SQLException;
+	int updateComputer(Computer c) throws SQLException;
 
 	Computer getComputer(int id) throws SQLException;
 

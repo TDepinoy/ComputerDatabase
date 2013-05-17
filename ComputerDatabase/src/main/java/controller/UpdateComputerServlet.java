@@ -9,17 +9,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import entites.Company;
 import entites.Computer;
+import exceptions.DataAccessException;
 
 import service.ComputerServiceImpl;
 
 /**
  * Servlet implementation class UpdateComputerServlet
  */
+@SuppressWarnings("serial")
 @WebServlet("/updateComputer")
 public class UpdateComputerServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = LoggerFactory.getLogger(UpdateComputerServlet.class);
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -41,6 +47,10 @@ public class UpdateComputerServlet extends HttpServlet {
 			
 		} catch (NumberFormatException e) {
 			response.sendRedirect("showComputers");
+		} catch (DataAccessException e) {
+			logger.warn(e.getMessage());
+			request.setAttribute("error", e.getMessage());
+			request.getRequestDispatcher("/WEB-INF/errorPage.jsp").forward(request, response);
 		}
 	}
 }

@@ -16,9 +16,9 @@ import utils.OptionsRequest;
 /**
  * Servlet implementation class ShowComputerListServlet
  */
+@SuppressWarnings("serial")
 @WebServlet("/showComputers")
 public class ShowComputerListServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	public static final int MAX_RESULTS_PER_PAGE = 10;   
 	
  	/**

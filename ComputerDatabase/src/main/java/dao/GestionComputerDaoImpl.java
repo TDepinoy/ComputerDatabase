@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,29 +43,25 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	
 
 	@Override
-	public void deleteComputer(int id) throws SQLException {
+	public int deleteComputer(int id) throws SQLException {
 		PreparedStatement pt = null;
+		int result = 0;
 		try {
 			pt = JdbcConnection.getInstance().getConnection().prepareStatement(DELETE_ONE_COMPUTER);
 			pt.setInt(1, id);
-			pt.executeUpdate();
+			result = pt.executeUpdate();
 		} finally {
 			if (pt != null)
 				pt.close();
 		}
-	}
-
-	@Override
-	public void insertOrUpdateComputer(Computer c) throws SQLException {		
-		if (c.getId() > 0) 
-			updateComputer(c);	
-		else 
-			insertComputer(c);
+		
+		return result;
 	}
 	
 	@Override
-	public void insertComputer (Computer c) throws SQLException {
+	public int insertComputer (Computer c) throws SQLException {
 		PreparedStatement pt = null;
+		int result = 0;
 		try {
 			
 			pt = JdbcConnection.getInstance().getConnection().prepareStatement(INSERT_ONE_COMPUTER);
@@ -87,17 +82,20 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			else
 				pt.setNull(4, Types.NULL);
 					
-			pt.executeUpdate();
+			result = pt.executeUpdate();
 			
 		} finally {
 			if (pt != null)
 				pt.close();
 		}
+		
+		return result;
 	}
 	
 	@Override
-	public void updateComputer (Computer c) throws SQLException {
+	public int updateComputer (Computer c) throws SQLException {
 		PreparedStatement pt = null;
+		int result = 0;
 		try {
 			pt = JdbcConnection.getInstance().getConnection().prepareStatement(UPDATE_ONE_COMPUTER);
 			pt.setString(1, c.getName());
@@ -118,17 +116,19 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			else
 				pt.setNull(4, Types.NULL);
 					
-			pt.executeUpdate();
+			result = pt.executeUpdate();
 			
 		} finally {
 			if (pt != null)
 				pt.close();		
 		}
+		
+		return result;
 	}
 
 	@Override
 	public Computer getComputer(int id) throws SQLException {
-		Computer c = new Computer();
+		Computer c = null;
 		PreparedStatement pt = null;
 
 		try {
@@ -136,18 +136,21 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			pt.setInt(1, id);
 			ResultSet res = pt.executeQuery();
 
-			res.first();
+			if (res.first()) {
+				c = new Computer();
 
-			Company cy = new Company();
-			c.setId(res.getInt("c.id"));
-			c.setName(res.getString("c.name"));
-			c.setIntroduced(res.getDate("c.introduced"));
-			c.setDiscontinued(res.getDate("c.discontinued"));
-
-			cy.setId(res.getInt("cy.id"));
-			cy.setName(res.getString("cy.name"));
-
-			c.setCompany(cy);
+				c.setId(res.getInt("c.id"));
+				c.setName(res.getString("c.name"));
+				c.setIntroduced(res.getDate("c.introduced"));
+				c.setDiscontinued(res.getDate("c.discontinued"));
+	
+				if (res.getInt("cy.id") != 0) {
+					Company cy = new Company();
+					cy.setId(res.getInt("cy.id"));
+					cy.setName(res.getString("cy.name"));				
+					c.setCompany(cy);
+				}
+			}
 
 		} finally {
 			if (pt != null)

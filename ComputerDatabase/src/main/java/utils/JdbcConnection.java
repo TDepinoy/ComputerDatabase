@@ -26,6 +26,7 @@ public class JdbcConnection {
 			jdbcConnection = new JdbcConnection();
 		} catch (ClassNotFoundException e) {
 			logger.error("Impossible de charger le driver JDBC " + e.getMessage());
+			System.exit(-1);
 		}
 	}
 	
@@ -46,7 +47,6 @@ public class JdbcConnection {
 				session.set(conn);
 			} catch (SQLException e) {
 				logger.error("Impossible d'établir la connexion " + e.getMessage());
-				return null;
 			}
 		}
 		
@@ -55,7 +55,8 @@ public class JdbcConnection {
 	
 	public void closeConnection () {
 		try {
-			session.get().close();
+			if (session.get() != null)
+				session.get().close();
 		} catch (SQLException e) {
 			logger.error("Erreur lors de la fermeture de la connexion" + e.getMessage());
 		}
