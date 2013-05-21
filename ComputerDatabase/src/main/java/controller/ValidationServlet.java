@@ -30,7 +30,7 @@ import exceptions.DataAccessException;
 @WebServlet("/validationServlet")
 public class ValidationServlet extends HttpServlet {
 	
-	private static final Logger logger = LoggerFactory.getLogger(DeleteComputerServlet.class);
+	private static final Logger logger = LoggerFactory.getLogger(ValidationServlet.class);
 	
 	private static final String standardClass = "clearfix ";
 	private static final String errorClass = "clearfix error";
