@@ -21,6 +21,8 @@ public class JdbcConnection {
 	public ThreadLocal<Connection> session;
 	
 	static {
+		//jdbcConnection = new JdbcConnection();
+		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			jdbcConnection = new JdbcConnection();
@@ -31,25 +33,29 @@ public class JdbcConnection {
 	}
 	
 	private JdbcConnection () {
-		session = new ThreadLocal<Connection> ();
+		this.session = new ThreadLocal<Connection> () {
+			
+			@Override
+			protected Connection initialValue() {
+				Connection conn = null;
+				try {
+					conn = DriverManager.getConnection(URL, USERNAME, PWD);
+					conn.setAutoCommit(false);
+				} catch (SQLException e) {
+					logger.error("Impossible d'établir la connexion " + e.getMessage());
+				}
+				
+				return conn;
+			}
+			
+		};
 	}
 	
 	public static JdbcConnection getInstance () {
 		return jdbcConnection;
 	}
 	
-	public Connection getConnection() {
-
-		if (session.get() == null) {
-			try {
-				Connection conn = DriverManager.getConnection(URL, USERNAME, PWD);
-				conn.setAutoCommit(false);
-				session.set(conn);
-			} catch (SQLException e) {
-				logger.error("Impossible d'établir la connexion " + e.getMessage());
-			}
-		}
-		
+	public Connection getConnection() {	
 		return session.get();
 	}
 	
@@ -59,7 +65,8 @@ public class JdbcConnection {
 				session.get().close();
 		} catch (SQLException e) {
 			logger.error("Erreur lors de la fermeture de la connexion" + e.getMessage());
+		} finally {
+			session.remove();
 		}
-		session.remove();
 	}
 }

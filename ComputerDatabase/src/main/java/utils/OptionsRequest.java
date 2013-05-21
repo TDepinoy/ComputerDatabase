@@ -22,9 +22,15 @@ public class OptionsRequest {
 		}
 	}
 	
+	private final String[] CRITERIA = {OrderColumn.NAME.toString(), 
+			OrderColumn.INTRODUCED.toString(), 
+			OrderColumn.DISCONTINUED.toString(),
+			OrderColumn.COMPANY_NAME.toString(), 
+			OrderColumn.NAME.toString()};
+	
 	private String nameFilter;
-	private OrderWay orderW;
-	private OrderColumn orderC;
+	private String orderW;
+	private String orderC;
 	
 	public OptionsRequest(String nameFilter, int sort) {
 		
@@ -38,24 +44,14 @@ public class OptionsRequest {
 	private void setSort (int sort) {
 		
 		if (sort < 0)
-			this.orderW = OrderWay.DESC;	
+			this.orderW = OrderWay.DESC.toString();	
 		else
-			this.orderW = OrderWay.ASC;	
+			this.orderW = OrderWay.ASC.toString();	
 		
-		switch (Math.abs(sort)) {
-			case 2:
-				this.orderC = OrderColumn.INTRODUCED;
-				break;
-			case 3:
-				this.orderC = OrderColumn.DISCONTINUED;
-				break;
-			case 4:
-				this.orderC = OrderColumn.COMPANY_NAME;
-				break;
-			default:
-				this.orderC = OrderColumn.NAME;	
-				
-		}
+		if((sort > 4 || sort < -4) || (sort == 0))
+			this.orderC = CRITERIA[0];
+		else 
+			this.orderC = CRITERIA[Math.abs(sort)-1];
 	}
 	
 	public String getNameFilter() {
@@ -63,10 +59,10 @@ public class OptionsRequest {
 	}
 
 	public String getOrderW() {
-		return orderW.toString();
+		return orderW;
 	}
 
 	public String getOrderC() {
-		return orderC.toString();
+		return orderC;
 	}
 }
