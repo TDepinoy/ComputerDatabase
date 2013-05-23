@@ -6,6 +6,7 @@ import java.util.Formatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -37,22 +38,22 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 
 	
 	@Override
-	public int deleteComputer(int id) throws SQLException {
+	public int deleteComputer(int id) throws DataAccessException {
 		return jdbcTemplate.update(DELETE_ONE_COMPUTER, new Object [] {id});
 	}
 	
 	@Override
-	public int insertComputer (Computer c) throws SQLException {	
+	public int insertComputer (Computer c) throws DataAccessException {	
 		return jdbcTemplate.update(INSERT_ONE_COMPUTER, new Object [] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany().getId()});
 	}
 	
 	@Override
-	public int updateComputer (Computer c) throws SQLException {
+	public int updateComputer (Computer c) throws DataAccessException {
 		return jdbcTemplate.update(UPDATE_ONE_COMPUTER, new Object [] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany().getId(), c.getId()});
 	}
 
 	@Override
-	public Computer getComputer(int id) throws SQLException {
+	public Computer getComputer(int id) throws DataAccessException {
 		List<Computer> result = jdbcTemplate.query(SELECT_ONE_COMPUTER, new Object [] {id}, new ComputerRowMapper());
 		
 		if (!result.isEmpty())
@@ -62,7 +63,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	}
 
 	@Override
-	public List<Computer> getComputers(int start, int maxResults, OptionsRequest or) throws SQLException {	
+	public List<Computer> getComputers(int start, int maxResults, OptionsRequest or) throws DataAccessException {	
 		Formatter f = new Formatter ();
 		StringBuilder query = new StringBuilder (SELECT_ALL_COMPUTERS);
 		List<Computer> computers;
@@ -85,7 +86,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	}
 
 	@Override
-	public int countComputers (String filter) throws SQLException {
+	public int countComputers (String filter) throws DataAccessException {
 			
 		int total = 0;			
 		StringBuilder query = new StringBuilder (COUNT_COMPUTERS);
@@ -109,7 +110,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	private class ComputerRowMapper implements RowMapper<Computer> {
 	
 	  @Override
-	  public Computer mapRow(ResultSet rs, int line) throws SQLException {
+	  public Computer mapRow(ResultSet rs, int line) throws SQLException  {
 		  Computer computer = null;
 		  computer = new Computer(rs.getInt("c.id"),rs.getString("c.name"), rs.getDate("c.introduced"), rs.getDate("c.discontinued"), null);
 		  

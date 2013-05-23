@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +44,7 @@ public class ComputerServiceImpl implements ComputerService {
 			if (c == null)
 				throw new DaoException("Computer inexistant");
 			
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			logger.warn("Erreur lors de la récupération du computer " + e.getMessage());
 		}
 		
@@ -56,7 +57,7 @@ public class ComputerServiceImpl implements ComputerService {
 		
 		try {
 			computers = dao.getComputers(start, maxResults, or);
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			logger.warn("Erreur lors de l'obtention de la liste des computers " + e.getMessage());
 		}
 		
@@ -69,7 +70,7 @@ public class ComputerServiceImpl implements ComputerService {
 		
 		try {
 			totalResults = dao.countComputers(filter);
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			logger.warn("Erreur lors du count computers" + e.getMessage());
 		}
 		
@@ -92,7 +93,7 @@ public class ComputerServiceImpl implements ComputerService {
 				throw new DaoException("Error lors de l'insert/update");
 			
 			
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			logger.warn("Erreur lors de l'insertion ou la mise à jour d'un computer " + e.getMessage());
 
 		}
@@ -110,7 +111,7 @@ public class ComputerServiceImpl implements ComputerService {
 			if (result == 0)
 				throw new DaoException("Error lors de l'insert/update");
 			
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			logger.warn("Erreur lors de la suppression du computer " + e.getMessage());
 
 		}
@@ -122,7 +123,7 @@ public class ComputerServiceImpl implements ComputerService {
 		
 		try {
 			companies = daoCy.getCompanies();
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			logger.warn("Erreur lors de l'obtention de la liste des companies " + e.getMessage());
 		}
 		
@@ -139,7 +140,7 @@ public class ComputerServiceImpl implements ComputerService {
 			if (c == null)
 				throw new DaoException("Company inexistante");
 			
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			logger.warn("Erreur lors de la récupération d'une company " + e.getMessage());
 		}
 
