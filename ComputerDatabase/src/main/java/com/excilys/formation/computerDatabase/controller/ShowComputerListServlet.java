@@ -1,4 +1,4 @@
-package controller;
+package com.excilys.formation.computerDatabase.controller;
 
 import java.io.IOException;
 
@@ -8,10 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entites.Page;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import service.ComputerServiceImpl;
-import utils.OptionsRequest;
+import com.excilys.formation.computerDatabase.entites.Page;
+import com.excilys.formation.computerDatabase.service.ComputerService;
+import com.excilys.formation.computerDatabase.service.ComputerServiceImpl;
+import com.excilys.formation.computerDatabase.utils.OptionsRequest;
+
+
 
 /**
  * Servlet implementation class ShowComputerListServlet
@@ -21,11 +25,16 @@ import utils.OptionsRequest;
 public class ShowComputerListServlet extends HttpServlet {
 	public static final int MAX_RESULTS_PER_PAGE = 10;   
 	
+	
+	
  	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
+		ComputerService service = context.getBean(ComputerService.class);
+		context.close();
 		
 		int sort;
 		int pageNumber = 0;
@@ -44,11 +53,12 @@ public class ShowComputerListServlet extends HttpServlet {
 			pageNumber = 0;
 		}
 		
-		Page p = ComputerServiceImpl.getInstance().createPage (pageNumber, MAX_RESULTS_PER_PAGE, new OptionsRequest(nameFilter, sort));
+		Page p = service.createPage (pageNumber, MAX_RESULTS_PER_PAGE, new OptionsRequest(nameFilter, sort));
 
 		request.setAttribute("page", p);
 		request.setAttribute("s", sort);
 		request.setAttribute("filter", nameFilter);
-		request.getServletContext().getRequestDispatcher("/WEB-INF/showComputers.jsp").forward(request, response);
+		
+		getServletContext().getRequestDispatcher("/WEB-INF/showComputers.jsp").forward(request, response);
 	}
 }

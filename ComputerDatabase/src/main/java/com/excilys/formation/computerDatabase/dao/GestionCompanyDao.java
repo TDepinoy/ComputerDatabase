@@ -1,10 +1,11 @@
-package dao;
+package com.excilys.formation.computerDatabase.dao;
 
 
 import java.sql.SQLException;
 import java.util.List;
 
-import entites.Company;
+import com.excilys.formation.computerDatabase.entites.Company;
+
 
 public interface GestionCompanyDao {
 

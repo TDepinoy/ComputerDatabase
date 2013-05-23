@@ -1,60 +1,52 @@
-package service;
+package com.excilys.formation.computerDatabase.service;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import utils.JdbcConnection;
-import utils.OptionsRequest;
+import com.excilys.formation.computerDatabase.dao.GestionCompanyDao;
+import com.excilys.formation.computerDatabase.dao.GestionComputerDao;
+import com.excilys.formation.computerDatabase.entites.Company;
+import com.excilys.formation.computerDatabase.entites.Computer;
+import com.excilys.formation.computerDatabase.entites.Page;
+import com.excilys.formation.computerDatabase.exceptions.DaoException;
+import com.excilys.formation.computerDatabase.utils.OptionsRequest;
 
-import dao.GestionCompanyDaoImpl;
-import dao.GestionCompanyDao;
-import dao.GestionComputerDao;
-import dao.GestionComputerDaoImpl;
-import entites.Company;
-import entites.Computer;
-import entites.Page;
-import exceptions.DataAccessException;
 
+@Service
+@Transactional(readOnly=true)
 public class ComputerServiceImpl implements ComputerService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ComputerServiceImpl.class);
 	
-	private static ComputerService service;
-	
+	@Autowired
 	private GestionComputerDao dao;
+	
+	@Autowired
 	private GestionCompanyDao daoCy;
 	
-	static {
-		service = new ComputerServiceImpl();
-	}
-	
-	private ComputerServiceImpl () {
-		dao = GestionComputerDaoImpl.getInstance();
-		daoCy = GestionCompanyDaoImpl.getInstance();
-	}
-	
-	public static ComputerService getInstance() {
-		return service;
-	}
+	public ComputerServiceImpl () {}
+
 	
 	@Override
-	public Computer getComputer (int id) throws DataAccessException {	
+	public Computer getComputer (int id) throws DaoException {	
 		Computer c = null;
 		
 		try {
 			c = dao.getComputer(id);
 			
 			if (c == null)
-				throw new DataAccessException("Computer inexistant");
+				throw new DaoException("Computer inexistant");
 			
 		} catch (SQLException e) {
 			logger.warn("Erreur lors de la récupération du computer " + e.getMessage());
 		}
 		
-		JdbcConnection.getInstance().closeConnection();
 		return c;
 	}
 	
@@ -68,7 +60,6 @@ public class ComputerServiceImpl implements ComputerService {
 			logger.warn("Erreur lors de l'obtention de la liste des computers " + e.getMessage());
 		}
 		
-		JdbcConnection.getInstance().closeConnection();
 		return computers;
 	}
 	
@@ -82,12 +73,12 @@ public class ComputerServiceImpl implements ComputerService {
 			logger.warn("Erreur lors du count computers" + e.getMessage());
 		}
 		
-		JdbcConnection.getInstance().closeConnection();
 		return totalResults;
 	}
 
 	@Override
-	public void insertOrUpdateComputer (Computer c) throws DataAccessException {
+	@Transactional(readOnly=false)
+	public void insertOrUpdateComputer (Computer c) throws DaoException {
 		
 		int result = 0;
 		
@@ -98,23 +89,18 @@ public class ComputerServiceImpl implements ComputerService {
 				result = dao.insertComputer(c);
 			
 			if (result == 0)
-				throw new DataAccessException("Error lors de l'insert/update");
+				throw new DaoException("Error lors de l'insert/update");
 			
-			JdbcConnection.getInstance().getConnection().commit();
 			
 		} catch (SQLException e) {
 			logger.warn("Erreur lors de l'insertion ou la mise à jour d'un computer " + e.getMessage());
-			
-			try {
-				JdbcConnection.getInstance().getConnection().rollback();
-			} catch (SQLException e1) {}
-		} finally {
-			JdbcConnection.getInstance().closeConnection();
+
 		}
 	}
 	
 	@Override
-	public void deleteComputer (int id) throws DataAccessException {
+	@Transactional(readOnly=false)
+	public void deleteComputer (int id) throws DaoException {
 		
 		int result = 0;
 		
@@ -122,18 +108,12 @@ public class ComputerServiceImpl implements ComputerService {
 			result = dao.deleteComputer(id);
 			
 			if (result == 0)
-				throw new DataAccessException("Error lors de l'insert/update");
+				throw new DaoException("Error lors de l'insert/update");
 			
-			JdbcConnection.getInstance().getConnection().commit();
 		} catch (SQLException e) {
 			logger.warn("Erreur lors de la suppression du computer " + e.getMessage());
-			
-			try {
-				JdbcConnection.getInstance().getConnection().rollback();
-			} catch (SQLException e1) {}
+
 		}
-		
-		JdbcConnection.getInstance().closeConnection();
 	}
 	
 	@Override
@@ -146,25 +126,23 @@ public class ComputerServiceImpl implements ComputerService {
 			logger.warn("Erreur lors de l'obtention de la liste des companies " + e.getMessage());
 		}
 		
-		JdbcConnection.getInstance().closeConnection();
 		return companies;
 	}
 	
 	@Override
-	public Company getCompany (int id) throws DataAccessException {
+	public Company getCompany (int id) throws DaoException {
 		Company c = null;
 		
 		try {
 			c = daoCy.getCompany(id);
 			
 			if (c == null)
-				throw new DataAccessException("Company inexistante");
+				throw new DaoException("Company inexistante");
 			
 		} catch (SQLException e) {
 			logger.warn("Erreur lors de la récupération d'une company " + e.getMessage());
 		}
-		
-		JdbcConnection.getInstance().closeConnection();
+
 		return c;
 	}
 	

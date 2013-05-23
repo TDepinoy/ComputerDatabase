@@ -1,4 +1,4 @@
-package entites;
+package com.excilys.formation.computerDatabase.entites;
 
 public class Company {
 	

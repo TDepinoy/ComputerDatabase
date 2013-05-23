@@ -1,10 +1,11 @@
-package dao;
+package com.excilys.formation.computerDatabase.dao;
 
 import java.sql.SQLException;
 import java.util.List;
 
-import utils.OptionsRequest;
-import entites.Computer;
+import com.excilys.formation.computerDatabase.entites.Computer;
+import com.excilys.formation.computerDatabase.utils.OptionsRequest;
+
 
 public interface GestionComputerDao {
 

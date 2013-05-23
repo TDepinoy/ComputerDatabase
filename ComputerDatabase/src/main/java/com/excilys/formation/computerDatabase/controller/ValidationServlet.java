@@ -1,4 +1,4 @@
-package controller;
+package com.excilys.formation.computerDatabase.controller;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -14,14 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import service.ComputerService;
-import service.ComputerServiceImpl;
 
+import com.excilys.formation.computerDatabase.entites.Computer;
+import com.excilys.formation.computerDatabase.exceptions.DaoException;
+import com.excilys.formation.computerDatabase.service.ComputerService;
+import com.excilys.formation.computerDatabase.service.ComputerServiceImpl;
 import com.mysql.jdbc.StringUtils;
 
-import entites.Computer;
-import exceptions.DataAccessException;
 
 /**
  * Servlet implementation class validationServlet
@@ -41,8 +42,11 @@ public class ValidationServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
+		ComputerService service = context.getBean(ComputerService.class);
+		context.close();
+		
 		boolean error = false;
-		ComputerService service = ComputerServiceImpl.getInstance();
 		Computer c = new Computer();
 
 		String idComputer = request.getParameter("idComputer");
@@ -99,13 +103,13 @@ public class ValidationServlet extends HttpServlet {
 	
 			if (error) {
 				request.setAttribute("companies", service.getCompanies());
-				request.getServletContext().getRequestDispatcher("/WEB-INF/updateComputer.jsp").forward(request, response);
+				getServletContext().getRequestDispatcher("/WEB-INF/updateComputer.jsp").forward(request, response);
 			} else {		
 				service.insertOrUpdateComputer(c);
 				response.sendRedirect("showComputers");
 			}
 		
-		} catch (DataAccessException e) {
+		} catch (DaoException e) {
 			logger.warn(e.getMessage());
 			request.setAttribute("error", e.getMessage());
 			request.getRequestDispatcher("/WEB-INF/errorPage.jsp").forward(request, response);

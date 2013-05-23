@@ -1,4 +1,4 @@
-package utils;
+package com.excilys.formation.computerDatabase.utils;
 
 import com.mysql.jdbc.StringUtils;
 
