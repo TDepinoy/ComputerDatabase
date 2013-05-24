@@ -95,17 +95,15 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 			query.append(WHERE_FILTER_NAME_STR);
 
 		if (!StringUtils.isNullOrEmpty(filter))
-			total = jdbcTemplate.query(query.toString(), new Object[] {filter}, new ComputerCountRowMapper()).get(0);
+			total = jdbcTemplate.queryForObject(query.toString(), new Object[] {filter}, Integer.class);
 		else	
-			total = jdbcTemplate.query(query.toString(), new ComputerCountRowMapper()).get(0);
+			total = jdbcTemplate.queryForObject(query.toString(), Integer.class);
 			
 		return total;
 	}
 	
 	/**
-	 * Mapper computer requests
-	 * @author tdepinoy
-	 *
+	 * Mapper computer
 	 */
 	private class ComputerRowMapper implements RowMapper<Computer> {
 	
@@ -119,19 +117,5 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 		  
 		  return computer;
 	  }
-	}
-	
-	/**
-	 * Mapper computer count request
-	 * @author tdepinoy
-	 *
-	 */
-	private class ComputerCountRowMapper implements RowMapper<Integer> {
-
-		@Override
-		public Integer mapRow(ResultSet rs, int line) throws SQLException {
-			rs.first();
-			return rs.getInt("total");
-		}
 	}
 }
