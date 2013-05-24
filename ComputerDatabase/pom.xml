@@ -61,6 +61,13 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<version>0.8.0-rc1</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

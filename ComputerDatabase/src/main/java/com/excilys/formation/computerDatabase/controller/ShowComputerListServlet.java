@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.excilys.formation.computerDatabase.entites.Page;
 import com.excilys.formation.computerDatabase.service.ComputerService;
@@ -24,16 +26,18 @@ import com.excilys.formation.computerDatabase.utils.OptionsRequest;
 public class ShowComputerListServlet extends HttpServlet {
 	public static final int MAX_RESULTS_PER_PAGE = 10;   
 	
-	
+	private ApplicationContext context;
 	
  	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
+		if (context == null){
+	        context = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+        }
+		
 		ComputerService service = context.getBean(ComputerService.class);
-		context.close();
 		
 		int sort;
 		int pageNumber = 0;

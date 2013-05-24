@@ -112,7 +112,6 @@ public class ComputerServiceImpl implements ComputerService {
 			
 		} catch (DataAccessException e) {
 			logger.warn("Erreur lors de la suppression du computer " + e.getMessage());
-
 		}
 	}
 	

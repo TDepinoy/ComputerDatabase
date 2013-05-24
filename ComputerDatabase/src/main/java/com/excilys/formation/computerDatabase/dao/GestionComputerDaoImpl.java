@@ -109,8 +109,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	
 	  @Override
 	  public Computer mapRow(ResultSet rs, int line) throws SQLException  {
-		  Computer computer = null;
-		  computer = new Computer(rs.getInt("c.id"),rs.getString("c.name"), rs.getDate("c.introduced"), rs.getDate("c.discontinued"), null);
+		  Computer computer = new Computer(rs.getInt("c.id"),rs.getString("c.name"), rs.getDate("c.introduced"), rs.getDate("c.discontinued"), null);
 		  
 		  if (rs.getInt("cy.id") != 0)
 			  computer.setCompany(new Company(rs.getInt("cy.id"), rs.getString("cy.name")));

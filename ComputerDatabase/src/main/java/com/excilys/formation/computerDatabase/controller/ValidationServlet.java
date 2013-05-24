@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 
 import com.excilys.formation.computerDatabase.entites.Computer;
@@ -34,17 +36,21 @@ public class ValidationServlet extends HttpServlet {
 	
 	private static final String standardClass = "clearfix ";
 	private static final String errorClass = "clearfix error";
+	
+	private ApplicationContext context;
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
-		ComputerService service = context.getBean(ComputerService.class);
-		context.close();
 		
+		if (context == null){
+	        context = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+        }
+		
+		ComputerService service = context.getBean(ComputerService.class);
+
 		boolean error = false;
 		Computer c = new Computer();
 

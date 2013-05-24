@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.excilys.formation.computerDatabase.entites.Company;
 import com.excilys.formation.computerDatabase.entites.Computer;
@@ -29,15 +31,21 @@ public class UpdateComputerServlet extends HttpServlet {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UpdateComputerServlet.class);
 	
+	private ApplicationContext context;
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
+		if (context == null){
+	        context = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+        }
 		
-		int idComputer = 0;
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-config.xml");
 		ComputerService service = context.getBean(ComputerService.class);
-		context.close();
+
+		int idComputer = 0;
 		
 		try {
 			idComputer = Integer.parseInt(request.getParameter("idComputer"));

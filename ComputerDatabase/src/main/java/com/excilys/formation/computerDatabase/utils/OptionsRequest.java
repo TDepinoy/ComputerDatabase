@@ -48,7 +48,7 @@ public class OptionsRequest {
 		else
 			this.orderW = OrderWay.ASC.toString();	
 		
-		if((sort > 4 || sort < -4) || (sort == 0))
+		if((sort > 4 || sort < -4) || (sort == 0)) 
 			this.orderC = CRITERIA[0];
 		else 
 			this.orderC = CRITERIA[Math.abs(sort)-1];
