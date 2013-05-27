@@ -1,17 +1,12 @@
 package com.excilys.formation.computerDatabase.controller;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.formation.computerDatabase.exceptions.DaoException;
 import com.excilys.formation.computerDatabase.service.ComputerService;
@@ -21,34 +16,23 @@ import com.excilys.formation.computerDatabase.service.ComputerService;
 /**
  * Servlet implementation class DeleteComputerServlet
  */
-@SuppressWarnings("serial")
-@WebServlet("/deleteComputer")
-public class DeleteComputerServlet extends HttpServlet {
+@Controller
+@RequestMapping("/deleteComputer")
+public class DeleteComputerServlet {
 
 	private static final Logger logger = LoggerFactory.getLogger(DeleteComputerServlet.class);
 	
-	private ApplicationContext context;
-	
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		if (context == null){
-	        context = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        }
-		
-		ComputerService service = context.getBean(ComputerService.class);
+	@Autowired
+	private ComputerService service;
 
-		
-		int idComputer = Integer.parseInt(request.getParameter("idComputer"));	
-		
+	public String doPost(@RequestParam("idComputer") int idComputer, Model model) {
+				
 		try {
 			service.deleteComputer(idComputer);
-			response.sendRedirect("showComputers");
+			return "redirect:showComputers";
 		} catch (DaoException e) {
 			logger.warn("Erreur lors de la suppression d'un computer " + e.getMessage());
-			request.getRequestDispatcher("/WEB-INF/errorPage.jsp").forward(request, response);
+			return "error";
 		}
 	}
 }

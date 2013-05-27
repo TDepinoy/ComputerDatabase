@@ -24,7 +24,7 @@
 
 		<h1>Edit computer</h1>
 
-		<form action="validationServlet" method="POST">
+		<form action="validationServlet.html" method="POST">
 
 			<fieldset>
 
@@ -82,11 +82,11 @@
 
 			<div class="actions">
 				<input type="submit" value="Save this computer" class="btn primary" />
-				or <a href="showComputers" class="btn">Cancel</a>
+				or <a href="showComputers.html" class="btn">Cancel</a>
 			</div>
 		</form>
 
-		<form action="deleteComputer" method="POST" class="topRight">
+		<form action="deleteComputer.html" method="POST" class="topRight">
 
 			<input type="hidden" value="${computer.id}" name="idComputer" /> 
 			<input type="submit" value="Delete this computer" class="btn danger" />

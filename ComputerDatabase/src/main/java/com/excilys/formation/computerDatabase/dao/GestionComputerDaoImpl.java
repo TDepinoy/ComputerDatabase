@@ -44,12 +44,12 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	
 	@Override
 	public int insertComputer (Computer c) throws DataAccessException {	
-		return jdbcTemplate.update(INSERT_ONE_COMPUTER, new Object [] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany().getId()});
+		return jdbcTemplate.update(INSERT_ONE_COMPUTER, new Object [] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany() != null ? c.getCompany().getId() : null});
 	}
 	
 	@Override
 	public int updateComputer (Computer c) throws DataAccessException {
-		return jdbcTemplate.update(UPDATE_ONE_COMPUTER, new Object [] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany().getId(), c.getId()});
+		return jdbcTemplate.update(UPDATE_ONE_COMPUTER, new Object [] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany() != null ? c.getCompany().getId() : null, c.getId()});
 	}
 
 	@Override

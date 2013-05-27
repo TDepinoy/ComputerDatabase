@@ -15,7 +15,7 @@
 
 	<header class="topbar">
 		<h1 class="fill">
-			<a href="showComputers"> Computer Database application </a>
+			<a href="showComputers.html"> Computer Database application </a>
 		</h1>
 	</header>
 
@@ -24,7 +24,7 @@
 		<h1>${page.totalResults eq 0 ? 'No' : page.totalResults} computers found</h1>
 
 		<div id="actions">
-			<form action="showComputers" method="GET">
+			<form action="showComputers.html" method="GET">
 
 				<input type="search" id="searchbox" name="filter"
 					value="${empty filter ? '' : filter}"
@@ -50,23 +50,23 @@
 						<tr>
 							<th
 								class="col2 header ${s eq '1' ? 'headerSortUp' :  s eq '-1' ? 'headerSortDown' : empty s ? 'headerSortUp' : ''}">
-								<a href="showComputers?filter=${filter}&s=${s eq '1' ? '-1' : '1'}">Computer name</a></th>
+								<a href="showComputers.html?filter=${filter}&s=${s eq '1' ? '-1' : '1'}">Computer name</a></th>
 							<th
 								class="col3 header ${s eq '2' ? 'headerSortUp' :  s eq '-2' ? 'headerSortDown' : ''}">
-								<a href="showComputers?filter=${filter}&s=${s eq '2' ? '-2' : '2'}">Introduced</a></th>
+								<a href="showComputers.html?filter=${filter}&s=${s eq '2' ? '-2' : '2'}">Introduced</a></th>
 							<th
 								class="col4 header ${s eq '3' ? 'headerSortUp' :  s eq '-3' ? 'headerSortDown' : ''}">
-								<a href="showComputers?filter=${filter}&s=${s eq '3' ? '-3' : '3'}">Discontinued</a></th>
+								<a href="showComputers.html?filter=${filter}&s=${s eq '3' ? '-3' : '3'}">Discontinued</a></th>
 							<th
 								class="col5 header ${s eq '4' ? 'headerSortUp' :  s eq '-4' ? 'headerSortDown' : ''} ">
-								<a href="showComputers?filter=${filter}&s=${s eq '4' ? '-4' : '4'}">Company</a></th>
+								<a href="showComputers.html?filter=${filter}&s=${s eq '4' ? '-4' : '4'}">Company</a></th>
 
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach var="c" items="${page.computers}">
 							<tr>
-								<td><a href="updateComputer?idComputer=${c.id}">${c.name}</a></td>
+								<td><a href="updateComputer.html?idComputer=${c.id}">${c.name}</a></td>
 								<td>${c.introduced}</td>
 								<td>${c.discontinued}</td>
 								<td>${c.company.name}</td>
@@ -80,7 +80,7 @@
 						<c:choose>
 							<c:when test="${not page.firstPage}">
 								<li class="prev"><a
-									href="showComputers?p=${page.numPage - 1}&filter=${filter}&s=${s}">&larr; Previous</a></li>
+									href="showComputers.html?p=${page.numPage - 1}&filter=${filter}&s=${s}">&larr; Previous</a></li>
 							</c:when>
 							<c:otherwise>
 								<li class="prev disabled"><a>&larr; Previous</a></li>
@@ -93,7 +93,7 @@
 						<c:choose>
 							<c:when test="${not page.lastPage}">
 								<li class="next"><a
-									href="showComputers?p=${page.numPage + 1}&filter=${filter}&s=${s}">Next
+									href="showComputers.html?p=${page.numPage + 1}&filter=${filter}&s=${s}">Next
 										&rarr;</a></li>
 							</c:when>
 							<c:otherwise>
