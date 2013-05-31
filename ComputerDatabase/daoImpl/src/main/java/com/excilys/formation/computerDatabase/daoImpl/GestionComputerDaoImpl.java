@@ -6,8 +6,9 @@ import java.util.Formatter;
 import java.util.List;
 
 import com.excilys.formation.computerDatabase.daoAPI.GestionComputerDao;
+
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -35,26 +36,49 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	public GestionComputerDaoImpl () {}
-
-	
-	@Override
-	public int deleteComputer(int id) throws DataAccessException {
-		return jdbcTemplate.update(DELETE_ONE_COMPUTER, new Object [] {id});
-	}
-	
-	@Override
-	public int insertComputer (Computer c) throws DataAccessException {	
-		return jdbcTemplate.update(INSERT_ONE_COMPUTER, new Object [] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany() != null ? c.getCompany().getId() : null});
-	}
-	
-	@Override
-	public int updateComputer (Computer c) throws DataAccessException {
-		return jdbcTemplate.update(UPDATE_ONE_COMPUTER, new Object [] {c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany() != null ? c.getCompany().getId() : null, c.getId()});
-	}
 
 	@Override
-	public Computer getComputer(int id) throws DataAccessException {
+	public boolean deleteComputer(int id) {
+		int res = jdbcTemplate.update(DELETE_ONE_COMPUTER, new Object [] {id});
+		
+		if (res > 0)
+			return true;
+		
+		return false;
+	}
+	
+	@Override
+	public boolean insertComputer(Computer c) {
+		int res = jdbcTemplate.update(INSERT_ONE_COMPUTER, new Object[] {
+							c.getName(),
+							new java.sql.Date(c.getIntroduced().toDate().getTime()),
+							new java.sql.Date(c.getDiscontinued().toDate().getTime()),
+							c.getCompany() != null ? c.getCompany().getId() : null 
+					});
+
+		if (res > 0)
+			return true;
+
+		return false;
+	}
+	
+	@Override
+	public boolean updateComputer (Computer c) {
+		int res = jdbcTemplate.update(UPDATE_ONE_COMPUTER, new Object [] {
+				c.getName(), 
+				new java.sql.Date(c.getIntroduced().toDate().getTime()), 
+				new java.sql.Date(c.getDiscontinued().toDate().getTime()), 
+				c.getCompany() != null ? c.getCompany().getId() : null, c.getId()
+		});
+		
+		if (res > 0)
+			return true;
+		
+		return false;
+	}
+
+	@Override
+	public Computer getComputer(int id) {
 		List<Computer> result = jdbcTemplate.query(SELECT_ONE_COMPUTER, new Object [] {id}, new ComputerRowMapper());
 		
 		if (!result.isEmpty())
@@ -64,7 +88,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	}
 
 	@Override
-	public List<Computer> getComputers(int start, int maxResults, OptionsRequest or) throws DataAccessException {	
+	public List<Computer> getComputers(int start, int maxResults, OptionsRequest or) {	
 		Formatter f = new Formatter ();
 		StringBuilder query = new StringBuilder (SELECT_ALL_COMPUTERS);
 		List<Computer> computers;
@@ -86,7 +110,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	}
 
 	@Override
-	public int countComputers (String filter) throws DataAccessException {
+	public int countComputers (String filter) {
 			
 		int total = 0;			
 		StringBuilder query = new StringBuilder (COUNT_COMPUTERS);
@@ -109,7 +133,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	
 	  @Override
 	  public Computer mapRow(ResultSet rs, int line) throws SQLException  {
-		  Computer computer = new Computer(rs.getInt("c.id"),rs.getString("c.name"), rs.getDate("c.introduced"), rs.getDate("c.discontinued"), null);
+		  Computer computer = new Computer(rs.getInt("c.id"),rs.getString("c.name"), new LocalDate (rs.getDate("c.introduced")), new LocalDate (rs.getDate("c.discontinued")), null);
 		  
 		  if (rs.getInt("cy.id") != 0)
 			  computer.setCompany(new Company(rs.getInt("cy.id"), rs.getString("cy.name")));

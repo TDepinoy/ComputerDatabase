@@ -2,24 +2,22 @@ package com.excilys.formation.computerDatabase.daoAPI;
 
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
-
 import com.excilys.formation.computerDatabase.entites.Computer;
 import com.excilys.formation.computerDatabase.utils.OptionsRequest;
 
 
 public interface GestionComputerDao {
 
-	int deleteComputer(int id) throws DataAccessException;
+	boolean deleteComputer(int id);
 
-	int insertComputer(Computer c) throws DataAccessException;
+	boolean insertComputer(Computer c);
 
-	int updateComputer(Computer c) throws DataAccessException;
+	boolean updateComputer(Computer c);
 
-	Computer getComputer(int id) throws DataAccessException;
+	Computer getComputer(int id);
 
-	List<Computer> getComputers(int start, int maxResults, OptionsRequest or) throws DataAccessException; 
+	List<Computer> getComputers(int start, int maxResults, OptionsRequest or); 
 
-	int countComputers(String filter) throws DataAccessException;
+	int countComputers(String filter);
 
 }

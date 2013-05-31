@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,57 +22,50 @@
 
 		<h1>Add computer</h1>
 
-		<form action="validationServlet.html" method="POST">
+		<form:form action="addComputer.html" commandName="computer" method="POST">
 
-			<fieldset>
-								
-				<div class="${className}">
+<fieldset>
+
+				<div class="clearfix <c:if test="${!empty res.getFieldError('name')}"> error</c:if>">
 
 					<label for="name">Computer name</label>
 					<div class="input">
-						<input type="text" id="name" name="name" > 
+						<form:input type="text" id="name" path="name" />
 						<span class="help-inline">Required</span>
 					</div>
 				</div>
-				
-				<div class="${classIntroduced}">
+
+				<div class="clearfix <c:if test="${!empty res.getFieldError('introduced')}"> error</c:if>">
 					<label for="introduced">Introduced date</label>
 					<div class="input">
-						<input type="text" id="introduced" name="introduced" >
+						<form:input type="text" id="introduced" path="introduced" />
 						<span class="help-inline">Date (&#x27;yyyy-MM-dd&#x27;)</span>
 					</div>
 				</div>
 
-				<div class="${classDiscontinued}">
+				<div class="clearfix <c:if test="${!empty res.getFieldError('discontinued')}"> error</c:if>">
 					<label for="discontinued">Discontinued date</label>
 					<div class="input">
-						<input type="text" id="discontinued" name="discontinued" >
+						<form:input type="text" id="discontinued" path="discontinued"/>
 						<span class="help-inline">Date (&#x27;yyyy-MM-dd&#x27;)</span>
 					</div>
 				</div>
 
-				<div class="${classCompany}">
+				<div class="clearfix">
 					<label for="company">Company</label>
 					<div class="input">
-						<select id="company" name="company">
-
-							<option class="blank" value="">-- Choose a company --</option>
-
-							<c:forEach var="c" items="${companies}">
-								<option value="${c.id}" >${c.name}</option>		
-							</c:forEach>
-
-						</select> 
-						<span class="help-inline" ></span>
+						<form:select id="company" path="company">
+							<form:option class="blank" value="">-- Choose a company --</form:option>
+							<form:options items="${companies}" itemValue="id" itemLabel="name"/>
+						</form:select> <span class="help-inline"></span>
 					</div>
 				</div>
 			</fieldset>
-
 			<div class="actions">
 				<input type="submit" value="Save this computer" class="btn primary" />
 				or <a href="showComputers.html" class="btn">Cancel</a>
 			</div>
-		</form>
+		</form:form>
 	</section>
 </body>
 </html>

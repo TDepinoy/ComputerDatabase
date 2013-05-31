@@ -1,6 +1,5 @@
 package com.excilys.formation.computerDatabase.utils;
 
-import com.mysql.jdbc.StringUtils;
 
 public class OptionsRequest {
 	
@@ -34,7 +33,7 @@ public class OptionsRequest {
 	
 	public OptionsRequest(String nameFilter, int sort) {
 		
-		if (!StringUtils.isNullOrEmpty(nameFilter))
+		if (nameFilter != null && !nameFilter.isEmpty())
 			this.nameFilter = new StringBuilder().append("%").append(nameFilter).append("%").toString();
 		
 		setSort(sort);

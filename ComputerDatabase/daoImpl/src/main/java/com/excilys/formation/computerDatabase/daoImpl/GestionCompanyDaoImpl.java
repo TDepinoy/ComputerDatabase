@@ -23,9 +23,6 @@ public class GestionCompanyDaoImpl implements GestionCompanyDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public GestionCompanyDaoImpl() {
-    }
-
 
     @Override
     public List<Company> getCompanies() throws DataAccessException {

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!DOCTYPE html>
 <html>
@@ -24,58 +24,44 @@
 
 		<h1>Edit computer</h1>
 
-		<form action="validationServlet.html" method="POST">
+		<form:form action="updateComputer.html" commandName="computer" method="POST">
 
 			<fieldset>
 
-				<input type="hidden" value="${computer.id}" name="idComputer" />
+				<form:input type="hidden" path="id" id="id"/>
 
-				<div class="${className}">
+				<div class="clearfix <c:if test="${!empty res.getFieldError('name')}"> error</c:if>">
 
 					<label for="name">Computer name</label>
 					<div class="input">
-						<input type="text" id="name" name="name" value="${computer.name}">
+						<form:input type="text" id="name" path="name" />
 						<span class="help-inline">Required</span>
 					</div>
 				</div>
 
-				<div class="${classIntroduced}">
+				<div class="clearfix <c:if test="${!empty res.getFieldError('introduced')}"> error</c:if>">
 					<label for="introduced">Introduced date</label>
 					<div class="input">
-						<input type="text" id="introduced" name="introduced"
-							value="<fmt:formatDate value="${computer.introduced}" pattern="yyyy-MM-dd" />">
+						<form:input type="text" id="introduced" path="introduced" />
 						<span class="help-inline">Date (&#x27;yyyy-MM-dd&#x27;)</span>
 					</div>
 				</div>
 
-				<div class="${classDiscontinued}">
+				<div class="clearfix <c:if test="${!empty res.getFieldError('discontinued')}"> error</c:if>">
 					<label for="discontinued">Discontinued date</label>
 					<div class="input">
-						<input type="text" id="discontinued" name="discontinued"
-							value="<fmt:formatDate value="${computer.discontinued}" pattern="yyyy-MM-dd" />">
+						<form:input type="text" id="discontinued" path="discontinued"/>
 						<span class="help-inline">Date (&#x27;yyyy-MM-dd&#x27;)</span>
 					</div>
 				</div>
 
-				<div class="${classCompany}">
+				<div class="clearfix">
 					<label for="company">Company</label>
 					<div class="input">
-						<select id="company" name="company">
-
-							<option class="blank" value="">-- Choose a company --</option>
-
-							<c:forEach var="c" items="${companies}">
-								<c:choose>
-									<c:when test="${computer.company.id ne c.id}">
-										<option value="${c.id}">${c.name}</option>
-									</c:when>
-									<c:when test="${computer.company.id eq c.id}">
-										<option selected="selected" value="${c.id}">${c.name}</option>
-									</c:when>
-								</c:choose>
-							</c:forEach>
-
-						</select> <span class="help-inline"></span>
+						<form:select id="company" path="company">
+							<form:option class="blank" value="">-- Choose a company --</form:option>
+							<form:options items="${companies}" itemValue="id" itemLabel="name"/>
+						</form:select> <span class="help-inline"></span>
 					</div>
 				</div>
 			</fieldset>
@@ -84,7 +70,7 @@
 				<input type="submit" value="Save this computer" class="btn primary" />
 				or <a href="showComputers.html" class="btn">Cancel</a>
 			</div>
-		</form>
+		</form:form>
 
 		<form action="deleteComputer.html" method="POST" class="topRight">
 
