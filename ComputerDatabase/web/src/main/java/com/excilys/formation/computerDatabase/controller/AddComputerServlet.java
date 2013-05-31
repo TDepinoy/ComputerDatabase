@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,12 +32,7 @@ public class AddComputerServlet {
 	@Autowired
 	private ComputerService service;
 
-    @ExceptionHandler(IllegalStateException.class)
-    public String handleIllegalStateException (IllegalStateException e) {
-    	logger.warn(e.getMessage());
-        return "redirect:showComputers.html";
-    }
-	
+ 	
     @RequestMapping(method = RequestMethod.GET)
 	public String doGet(Model model) {
 		model.addAttribute("companies", service.getCompanies());

@@ -5,13 +5,11 @@ import java.util.List;
 import com.excilys.formation.computerDatabase.serviceAPI.ComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,18 +33,6 @@ public class UpdateComputerServlet {
 
 	@Autowired
 	private ComputerService service;
-
-    @ExceptionHandler(IllegalStateException.class)
-    public String handleIllegalStateException (IllegalStateException e) {
-        logger.warn(e.getMessage());
-        return "redirect:showComputers.html";
-    }
-	
-	@ExceptionHandler(TypeMismatchException.class)
-	public String handleTypeMismatchException(TypeMismatchException e) {
-		logger.warn(e.getMessage());
-		return "redirect:showComputers.html";
-	}
 
 	@RequestMapping
 	public String doGet(
