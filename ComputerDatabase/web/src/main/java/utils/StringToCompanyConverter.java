@@ -4,6 +4,7 @@ import java.beans.PropertyEditorSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.excilys.formation.computerDatabase.entites.Company;
 import com.excilys.formation.computerDatabase.serviceAPI.ComputerService;
 import com.mysql.jdbc.StringUtils;
 
@@ -30,5 +31,14 @@ public class StringToCompanyConverter extends PropertyEditorSupport{
 		}
 		else 
 			setValue(null);
+	}
+	
+	@Override
+	public String getAsText() {
+		Company company = (Company) getValue();
+		if(company == null) {
+			return null;
+		}
+		return String.valueOf(company.getId());
 	}
 }

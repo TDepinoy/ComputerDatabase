@@ -2,6 +2,7 @@ package com.excilys.formation.computerDatabase.daoImpl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
@@ -91,7 +92,7 @@ public class GestionComputerDaoImpl implements GestionComputerDao {
 	public List<Computer> getComputers(int start, int maxResults, OptionsRequest or) {	
 		Formatter f = new Formatter ();
 		StringBuilder query = new StringBuilder (SELECT_ALL_COMPUTERS);
-		List<Computer> computers;
+		List<Computer> computers = new ArrayList<Computer> ();
 		
 		if (!StringUtils.isNullOrEmpty(or.getNameFilter())) 
 			query.append(WHERE_FILTER_NAME_STR);

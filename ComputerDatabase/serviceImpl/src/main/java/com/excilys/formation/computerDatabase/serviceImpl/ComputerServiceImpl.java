@@ -36,9 +36,7 @@ public class ComputerServiceImpl implements ComputerService {
 	
 	@Override
 	public List<Computer> getComputers(int start, int maxResults, OptionsRequest or) {
-		List<Computer> computers = dao.getComputers(start, maxResults, or);
-		Assert.notNull(computers, "Assert Erreur lors de la récupération de la liste des computers");
-		return computers;
+		return dao.getComputers(start, maxResults, or);
 	}
 	
 	@Override
