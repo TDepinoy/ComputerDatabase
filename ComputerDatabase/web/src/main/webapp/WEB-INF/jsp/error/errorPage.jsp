@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page isErrorPage="true"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -19,10 +19,11 @@
 
 		<h1>An error has occurred</h1>
 		
-		<div class="alert-message warning">
-	        <strong>Error: </strong>Error 400 occured !
-        </div>
-
+		<c:if test="${not empty exception}">
+			<div class="alert-message warning">
+		        <strong>Error: </strong>${exception.message}
+	        </div>
+		</c:if>
 	</section>
 </body>
 </html>

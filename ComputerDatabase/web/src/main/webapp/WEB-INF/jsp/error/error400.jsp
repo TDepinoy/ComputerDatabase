@@ -20,9 +20,8 @@
 		<h1>An error has occurred</h1>
 		
 		<div class="alert-message warning">
-	        <strong>Error: </strong>${exception.message}
+	        <strong>Error: </strong>Erreur 400 !
         </div>
-
 	</section>
 </body>
 </html>

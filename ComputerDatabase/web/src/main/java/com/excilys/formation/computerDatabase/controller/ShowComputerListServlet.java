@@ -25,8 +25,7 @@ public class ShowComputerListServlet {
 			@RequestParam(value = "p", defaultValue = "0") Integer pageNumber,
 			@RequestParam(value = "filter", required = false) String filter,
 			@RequestParam(value = "s", defaultValue = "1") Integer sort,
-			Model model) {
-
+			Model model) throws Exception {
 		
 		Page page = service.createPage(pageNumber, MAX_RESULTS_PER_PAGE, new OptionsRequest(filter, sort));
 
