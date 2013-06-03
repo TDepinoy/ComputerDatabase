@@ -30,7 +30,7 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	public Computer getComputer (int id) {	
 		Computer c = dao.getComputer(id);
-		Assert.notNull(c, "Assert Erreur : Computer existant");
+		Assert.notNull(c, "Assert Erreur : Computer inexistant");
 		return c;
 	}
 	

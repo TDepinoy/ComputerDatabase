@@ -10,8 +10,7 @@
         http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 
 	<context:annotation-config />
-	<context:component-scan
-		base-package="com.excilys.formation.computerDatabase.controller" />
+	<context:component-scan	base-package="com.excilys.formation.computerDatabase.controller" />
 	<mvc:annotation-driven />
 
 	<bean id="viewResolver"
@@ -25,8 +24,7 @@
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="exceptionMappings">
 			<props>
-				<prop key="java.lang.IllegalArgumentException">errorPage</prop>
-				<prop key="java.lang.Exception">errorPage</prop>
+				<prop key="java.lang.IllegalArgumentException">/error/errorPage</prop>
 			</props>
 		</property>
 	</bean>
