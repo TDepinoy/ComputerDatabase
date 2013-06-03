@@ -58,7 +58,7 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	@Transactional(readOnly=false)
 	public void deleteComputer (int id) {
-			Assert.isTrue(dao.deleteComputer(id), "Assert Erreur lors de la suppression d'un computer");
+		Assert.isTrue(dao.deleteComputer(id), "Assert Erreur lors de la suppression d'un computer");
 	}
 	
 	@Override
