@@ -8,7 +8,7 @@ public class OptionsRequest {
 	}
 	
 	private enum OrderColumn {
-		NAME("c.name"), INTRODUCED("c.introduced"), DISCONTINUED("c.discontinued"), COMPANY_NAME("cy.name");
+		NAME("c.name"), INTRODUCED("c.introduced"), DISCONTINUED("c.discontinued"), COMPANY_NAME("c.company.name");
 		
 		private final String field;
 		
