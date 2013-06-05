@@ -8,11 +8,11 @@ import com.excilys.formation.computerDatabase.utils.OptionsRequest;
 
 public interface GestionComputerDao {
 
-	boolean deleteComputer(int id);
+	void deleteComputer(int id);
 
-	boolean insertComputer(Computer c);
+	void insertComputer(Computer c);
 
-	boolean updateComputer(Computer c);
+	void updateComputer(Computer c);
 
 	Computer getComputer(int id);
 

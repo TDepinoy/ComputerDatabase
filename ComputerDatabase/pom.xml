@@ -18,6 +18,7 @@
 		<jdk.version>1.7</jdk.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<ComputerDatabase.version>0.0.1-SNAPSHOT</ComputerDatabase.version>
+		<hibernate.version>4.2.2.Final</hibernate.version>
 	</properties>
 
 	<dependencyManagement>
@@ -69,6 +70,12 @@
 				<artifactId>spring-webmvc</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>com.jolbox</groupId>
@@ -80,6 +87,24 @@
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
 				<version>2.2</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.jadira.usertype</groupId>
+				<artifactId>usertype.core</artifactId>
+				<version>3.1.0.CR6</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>javassist</groupId>
+				<artifactId>javassist</artifactId>
+				<version>3.12.1.GA</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

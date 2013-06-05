@@ -48,15 +48,15 @@ public class ComputerServiceImpl implements ComputerService {
 	@Transactional(readOnly=false)
 	public void insertOrUpdateComputer (Computer c) {
 		if (c.getId() > 0)
-			Assert.isTrue(dao.updateComputer(c), "Assert Erreur lors de la mise à jour d'un computer");
+			dao.updateComputer(c);
 		else 
-			Assert.isTrue(dao.insertComputer(c), "Assert Erreur lors de l'insertion d'un computer");
+			dao.insertComputer(c);
 	}
 	
 	@Override
 	@Transactional(readOnly=false)
 	public void deleteComputer (int id) {
-		Assert.isTrue(dao.deleteComputer(id), "Assert Erreur lors de la suppression d'un computer");
+		dao.deleteComputer(id);
 	}
 	
 	@Override

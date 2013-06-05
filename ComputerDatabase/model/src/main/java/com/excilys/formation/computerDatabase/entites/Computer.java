@@ -1,16 +1,42 @@
 package com.excilys.formation.computerDatabase.entites;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Entity
+@Table(name="computer")
 public class Computer {
 	
+	@Id
+	@GeneratedValue
+	@Column(name="id")
 	private int id;
+	
+	@Column(name="name", nullable=false)
 	private String name;	
+	
+	@Column(name="introduced")
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private LocalDate introduced;	
+	
+	@Column(name="discontinued")
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private LocalDate discontinued;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="company_id")
 	private Company company;
 	
 	public Computer () {}
